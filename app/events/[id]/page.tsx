@@ -228,6 +228,14 @@ if (userId) {
                   </span>
                 </div>
 
+                <div className="flex justify-between border-t border-slate-800 pt-4">
+  <span>Attendees</span>
+
+  <span>
+    {event.attendees?.length || 0}
+  </span>
+</div>
+
               </div>
 
             </div>
