@@ -30,6 +30,13 @@ export default function Navbar() {
         <div className="hidden md:flex items-center gap-8 text-sm text-slate-300">
 
           <Link
+            href="/"
+            className="hover:text-white transition"
+          >
+            Home
+          </Link>
+
+          <Link
             href="/events"
             className="hover:text-white transition"
           >
@@ -43,13 +50,23 @@ export default function Navbar() {
             Clubs
           </Link>
 
+          {/* Protected Links */}
           {isSignedIn && (
-            <Link
-              href="/dashboard"
-              className="hover:text-white transition"
-            >
-              Dashboard
-            </Link>
+            <>
+              <Link
+                href="/dashboard"
+                className="hover:text-white transition"
+              >
+                Dashboard
+              </Link>
+
+              <Link
+                href="/dashboard/create-event"
+                className="hover:text-white transition"
+              >
+                Create Event
+              </Link>
+            </>
           )}
 
         </div>
@@ -59,12 +76,14 @@ export default function Navbar() {
 
           {!isSignedIn ? (
             <>
+              {/* Login */}
               <SignInButton mode="modal">
-                <button className="px-4 py-2 text-sm rounded-lg border border-slate-700 hover:border-slate-500 transition">
+                <button className="px-4 py-2 text-sm rounded-lg border border-slate-700 hover:border-slate-500 hover:bg-slate-900 transition">
                   Login
                 </button>
               </SignInButton>
 
+              {/* Signup */}
               <SignUpButton mode="modal">
                 <button className="px-4 py-2 text-sm rounded-lg bg-indigo-500 hover:bg-indigo-600 transition">
                   Sign Up
@@ -72,7 +91,10 @@ export default function Navbar() {
               </SignUpButton>
             </>
           ) : (
-            <UserButton afterSignOutUrl="/" />
+            <>
+              {/* User Avatar */}
+              <UserButton afterSignOutUrl="/" />
+            </>
           )}
 
         </div>
