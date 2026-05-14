@@ -11,7 +11,7 @@ export default function RootLayout({
   return (
       <ClerkProvider>
     <html lang="en">
-      <body>
+      <body className="bg-slate-950 text-slate-100 antialiased">
         <SyncUser />
         <Navbar />
         {children}

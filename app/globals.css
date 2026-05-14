@@ -3,29 +3,28 @@
 :root {
   --background: #020617;
   --foreground: #f8fafc;
-
-  --card: #0f172a;
-  --border: #1e293b;
-
-  --primary: #6366f1;
-  --secondary: #06b6d4;
 }
 
-* {
-  box-sizing: border-box;
-  padding: 0;
-  margin: 0;
-}
-
-html,
-body {
-  width: 100%;
-  overflow-x: hidden;
+html {
   scroll-behavior: smooth;
 }
 
 body {
-  background: var(--background);
+  background:
+    radial-gradient(
+      circle at top,
+      rgba(99, 102, 241, 0.15),
+      transparent 35%
+    ),
+    #020617;
+
   color: var(--foreground);
+
+  min-height: 100vh;
+
   font-family: Arial, Helvetica, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
 }
