@@ -2,10 +2,20 @@
 
 import Link from "next/link";
 
+import {
+  UserButton,
+  SignInButton,
+  SignUpButton,
+  useUser,
+} from "@clerk/nextjs";
+
 export default function Navbar() {
+
+  const { isSignedIn } = useUser();
+
   return (
     <header className="sticky top-0 z-50 border-b border-slate-800 bg-slate-950/80 backdrop-blur-md">
-      
+
       <nav className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
 
         {/* Logo */}
@@ -16,7 +26,7 @@ export default function Navbar() {
           CampusConnect
         </Link>
 
-        {/* Navigation Links */}
+        {/* Navigation */}
         <div className="hidden md:flex items-center gap-8 text-sm text-slate-300">
 
           <Link
@@ -33,35 +43,42 @@ export default function Navbar() {
             Clubs
           </Link>
 
-          <Link
-            href="/dashboard"
-            className="hover:text-white transition"
-          >
-            Dashboard
-          </Link>
+          {isSignedIn && (
+            <Link
+              href="/dashboard"
+              className="hover:text-white transition"
+            >
+              Dashboard
+            </Link>
+          )}
 
         </div>
 
-        {/* Auth Buttons */}
+        {/* Right Side */}
         <div className="flex items-center gap-3">
 
-          <Link
-            href="/login"
-            className="px-4 py-2 text-sm rounded-lg border border-slate-700 hover:border-slate-500 transition"
-          >
-            Login
-          </Link>
+          {!isSignedIn ? (
+            <>
+              <SignInButton mode="modal">
+                <button className="px-4 py-2 text-sm rounded-lg border border-slate-700 hover:border-slate-500 transition">
+                  Login
+                </button>
+              </SignInButton>
 
-          <Link
-            href="/register"
-            className="px-4 py-2 text-sm rounded-lg bg-indigo-500 hover:bg-indigo-600 transition"
-          >
-            Sign Up
-          </Link>
+              <SignUpButton mode="modal">
+                <button className="px-4 py-2 text-sm rounded-lg bg-indigo-500 hover:bg-indigo-600 transition">
+                  Sign Up
+                </button>
+              </SignUpButton>
+            </>
+          ) : (
+            <UserButton afterSignOutUrl="/" />
+          )}
 
         </div>
 
       </nav>
+
     </header>
   );
 }
