@@ -1,48 +1,111 @@
-type EventDetailsProps = {
-  params: Promise<{
-    id: string;
-  }>;
-};
+async function getEvent(id: string) {
 
-export default async function EventDetailsPage({
-  params,
-}: EventDetailsProps) {
+  const res = await fetch(
+    `http://localhost:3000/api/events/${id}`,
+    {
+      cache: "no-store",
+    }
+  );
+
+  return res.json();
+
+}
+
+export default async function EventDetailsPage(
+  {
+    params,
+  }: {
+    params: Promise<{ id: string }>
+  }
+) {
 
   const { id } = await params;
 
+  const data = await getEvent(id);
+
+  const event = data.event;
+
+  if (!event) {
+
+    return (
+      <main className="min-h-screen flex items-center justify-center">
+
+        <h1 className="text-3xl font-bold">
+          Event Not Found
+        </h1>
+
+      </main>
+    );
+
+  }
+
   return (
-    <main className="min-h-screen px-6 py-16">
+    <main className="min-h-screen pb-20">
 
-      <div className="max-w-4xl mx-auto">
+      {/* Hero Image */}
+      <div className="h-[400px] bg-slate-900 overflow-hidden">
 
-        <div className="h-72 rounded-3xl bg-gradient-to-br from-indigo-500 to-cyan-500" />
+        {event.imageUrl ? (
 
-        <div className="mt-10">
+          <img
+            src={event.imageUrl}
+            alt={event.title}
+            className="w-full h-full object-cover"
+          />
 
-          <span className="text-cyan-400 font-medium">
-            Technology
-          </span>
+        ) : (
 
-          <h1 className="mt-4 text-5xl font-bold">
-            Event ID: {id}
-          </h1>
-
-          <p className="mt-6 text-slate-400 leading-8">
-            This is the detailed event page for the selected campus event.
-            Later this data will come from MongoDB.
-          </p>
-
-          <div className="mt-10 flex gap-4">
-
-            <button className="px-6 py-3 rounded-xl bg-indigo-500 hover:bg-indigo-600 transition">
-              Register Now
-            </button>
-
-            <button className="px-6 py-3 rounded-xl border border-slate-700 hover:border-slate-500 transition">
-              Save Event
-            </button>
-
+          <div className="w-full h-full flex items-center justify-center text-slate-500 text-xl">
+            No Event Image
           </div>
+
+        )}
+
+      </div>
+
+      {/* Content */}
+      <div className="max-w-5xl mx-auto px-6 mt-12">
+
+        {/* Category */}
+        <span className="px-4 py-2 rounded-full bg-indigo-500/20 text-indigo-300 text-sm">
+          {event.category}
+        </span>
+
+        {/* Title */}
+        <h1 className="mt-6 text-5xl font-bold">
+          {event.title}
+        </h1>
+
+        {/* Meta Info */}
+        <div className="mt-8 flex flex-wrap gap-8 text-slate-400">
+
+          <div>
+            📍 {event.location}
+          </div>
+
+          <div>
+            📅 {
+              new Date(event.date)
+                .toLocaleDateString()
+            }
+          </div>
+
+          <div>
+            👤 {event.createdBy?.name}
+          </div>
+
+        </div>
+
+        {/* Description */}
+        <div className="mt-12">
+
+          <h2 className="text-2xl font-semibold">
+            About This Event
+          </h2>
+
+          <p className="mt-6 text-slate-300 leading-8 whitespace-pre-line">
+            {event.description}
+          </p>
 
         </div>
 
