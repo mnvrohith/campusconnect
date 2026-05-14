@@ -20,57 +20,63 @@ export default async function EventsPage() {
   const events = data.events || [];
 
   return (
-    <main className="min-h-screen px-6 py-16">
+    <main className="min-h-screen bg-[#020617] text-white px-6 py-14">
 
+      {/* Header */}
       <div className="max-w-7xl mx-auto">
 
-        {/* Header */}
-        <div className="flex items-center justify-between">
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
 
           <div>
 
             <h1 className="text-5xl font-bold">
-              Campus Events
+              Explore Events
             </h1>
 
-            <p className="mt-4 text-slate-400">
-              Explore upcoming events happening on campus.
+            <p className="mt-4 text-slate-400 text-lg">
+              Discover workshops, hackathons,
+              cultural fests, sports, and more.
             </p>
 
           </div>
 
           <Link
-            href="/dashboard/create-event"
-            className="px-5 py-3 rounded-xl bg-indigo-500 hover:bg-indigo-600 transition"
+            href="/create-event"
+            className="px-6 py-4 rounded-2xl bg-indigo-500 hover:bg-indigo-600 transition font-semibold w-fit"
           >
-            Create Event
+            + Create Event
           </Link>
 
         </div>
 
-        {/* Event Grid */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mt-14">
+        {/* Events Grid */}
+        <div className="mt-14 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
 
           {events.map((event: any) => (
 
-            <div
+            <Link
               key={event._id}
-              className="rounded-2xl border border-slate-800 bg-slate-900 overflow-hidden hover:border-indigo-500 transition"
+              href={`/events/${event._id}`}
+              className="group rounded-3xl overflow-hidden border border-slate-800 bg-slate-900/60 hover:border-indigo-500/40 transition-all duration-300 hover:-translate-y-2"
             >
 
               {/* Image */}
-              <div className="h-52 bg-slate-800">
+              <div className="h-56 overflow-hidden bg-slate-800">
 
                 {event.imageUrl ? (
+
                   <img
                     src={event.imageUrl}
                     alt={event.title}
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-cover group-hover:scale-105 transition duration-500"
                   />
+
                 ) : (
+
                   <div className="w-full h-full flex items-center justify-center text-slate-500">
                     No Image
                   </div>
+
                 )}
 
               </div>
@@ -78,57 +84,61 @@ export default async function EventsPage() {
               {/* Content */}
               <div className="p-6">
 
-                <div className="flex items-center justify-between">
+                {/* Category */}
+                <span className="inline-block px-4 py-1 rounded-full bg-indigo-500/20 text-indigo-300 text-sm">
+                  {event.category || "General"}
+                </span>
 
-                  <span className="text-xs px-3 py-1 rounded-full bg-indigo-500/20 text-indigo-300">
-                    {event.category}
-                  </span>
-
-                  <span className="text-xs text-slate-500">
-                    {new Date(event.date)
-                      .toLocaleDateString()}
-                  </span>
-
-                </div>
-
-                <h2 className="mt-4 text-2xl font-semibold">
+                {/* Title */}
+                <h2 className="mt-5 text-2xl font-bold line-clamp-2">
                   {event.title}
                 </h2>
 
-                <p className="mt-3 text-slate-400 line-clamp-3">
+                {/* Description */}
+                <p className="mt-4 text-slate-400 line-clamp-3 leading-7">
                   {event.description}
                 </p>
 
-                <div className="mt-6 flex items-center justify-between">
+                {/* Footer */}
+                <div className="mt-8 flex items-center justify-between text-sm text-slate-400">
 
                   <div>
-
-                    <p className="text-sm text-slate-300">
-                      {event.location}
-                    </p>
-
-                    <p className="text-xs text-slate-500 mt-1">
-                      By {event.createdBy?.name}
-                    </p>
-
+                    📍 {event.location}
                   </div>
 
-                  <Link
-                    href={`/events/${event._id}`}
-                    className="text-indigo-400 hover:text-indigo-300 text-sm"
-                  >
-                    View Details →
-                  </Link>
+                  <div>
+                    📅 {
+                      new Date(event.date)
+                        .toLocaleDateString()
+                    }
+                  </div>
 
                 </div>
 
               </div>
 
-            </div>
+            </Link>
 
           ))}
 
         </div>
+
+        {/* Empty State */}
+        {events.length === 0 && (
+
+          <div className="mt-24 text-center">
+
+            <h2 className="text-3xl font-bold">
+              No Events Yet
+            </h2>
+
+            <p className="mt-4 text-slate-400">
+              Create your first campus event.
+            </p>
+
+          </div>
+
+        )}
 
       </div>
 

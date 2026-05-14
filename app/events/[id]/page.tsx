@@ -1,124 +1,97 @@
-"use client";
+import RSVPButton from "@/components/events/RSVPButton";
+import { auth } from "@clerk/nextjs/server";
 
-import { useEffect, useState } from "react";
+import User from "@/models/User";
 
-import { useParams, useRouter } from "next/navigation";
+import {connectDB} from "@/lib/mongodb";
 
-import { useUser } from "@clerk/nextjs";
 
-export default function EventDetailsPage() {
+async function getEvent(id: string) {
 
-  const { id } = useParams();
-
-  const router = useRouter();
-
-  const { user } = useUser();
-
-  const [event, setEvent] = useState<any>(null);
-
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-
-    async function fetchEvent() {
-
-      try {
-
-        const res = await fetch(
-          `/api/events/${id}`
-        );
-
-        const data = await res.json();
-
-        setEvent(data.event);
-
-      } catch (error) {
-
-        console.log(error);
-
-      } finally {
-
-        setLoading(false);
-
-      }
-
+  const res = await fetch(
+    `http://localhost:3000/api/events/${id}`,
+    {
+      cache: "no-store",
     }
+  );
 
-    fetchEvent();
+  return res.json();
 
-  }, [id]);
+}
 
-  async function handleDelete() {
+export default async function EventDetailsPage(
+  {
+    params,
+  }: {
+    params: Promise<{ id: string }>
+  }
+) {
 
-    const confirmDelete = confirm(
-      "Delete this event?"
+  const { id } = await params;
+
+  const data = await getEvent(id);
+
+  const event = data.event;
+
+  const { userId } = await auth();
+
+let isCreator = false;
+
+let isRegistered = false;
+
+if (userId) {
+
+  await connectDB();
+
+  const dbUser = await User.findOne({
+    clerkId: userId,
+  });
+
+  if (dbUser) {
+
+    isCreator =
+      event.createdBy?._id?.toString() ===
+      dbUser._id.toString();
+
+    isRegistered =
+    event.attendees?.some(
+      (attendee: any) =>
+        attendee.toString() ===
+        dbUser._id.toString()
     );
-
-    if (!confirmDelete) return;
-
-    try {
-
-      const res = await fetch(
-        `/api/events/${id}`,
-        {
-          method: "DELETE",
-        }
-      );
-
-      const data = await res.json();
-
-      if (data.success) {
-
-        alert("Event deleted");
-
-        router.push("/events");
-
-      }
-
-    } catch (error) {
-
-      console.log(error);
-
-    }
+  
 
   }
 
-  if (loading) {
-
-    return (
-      <main className="min-h-screen flex items-center justify-center">
-
-        <p className="text-slate-400">
-          Loading...
-        </p>
-
-      </main>
-    );
-
-  }
+}
 
   if (!event) {
 
     return (
-      <main className="min-h-screen flex items-center justify-center">
+      <main className="min-h-screen flex items-center justify-center bg-[#020617] text-white">
 
-        <h1 className="text-3xl font-bold">
-          Event Not Found
-        </h1>
+        <div className="text-center">
+
+          <h1 className="text-5xl font-bold">
+            Event Not Found
+          </h1>
+
+          <p className="mt-4 text-slate-400">
+            This event may have been removed.
+          </p>
+
+        </div>
 
       </main>
     );
 
   }
 
-  const isOwner =
-    user?.id === event.createdBy?.clerkId;
-
   return (
-    <main className="min-h-screen pb-20">
+    <main className="min-h-screen bg-[#020617] text-white">
 
-      {/* Hero */}
-      <div className="h-[400px] bg-slate-900 overflow-hidden">
+      {/* HERO SECTION */}
+      <section className="relative h-[500px] overflow-hidden">
 
         {event.imageUrl ? (
 
@@ -130,92 +103,140 @@ export default function EventDetailsPage() {
 
         ) : (
 
-          <div className="w-full h-full flex items-center justify-center text-slate-500">
-            No Image
-          </div>
+          <div className="w-full h-full bg-slate-900" />
 
         )}
 
-      </div>
+        {/* Overlay */}
+        <div className="absolute inset-0 bg-gradient-to-t from-[#020617] via-[#020617]/60 to-transparent" />
 
-      {/* Content */}
-      <div className="max-w-5xl mx-auto px-6 mt-12">
+        {/* Content */}
+        <div className="absolute bottom-0 left-0 w-full">
 
-        <div className="flex items-start justify-between gap-6">
+          <div className="max-w-7xl mx-auto px-6 pb-14">
 
-          <div>
-
-            <span className="px-4 py-2 rounded-full bg-indigo-500/20 text-indigo-300 text-sm">
-              {event.category}
+            {/* Category */}
+            <span className="inline-block px-5 py-2 rounded-full bg-indigo-500/20 backdrop-blur-md text-indigo-300 text-sm border border-indigo-500/30">
+              {event.category || "General"}
             </span>
 
-            <h1 className="mt-6 text-5xl font-bold">
+            {/* Title */}
+            <h1 className="mt-6 text-5xl md:text-7xl font-extrabold max-w-5xl leading-tight">
               {event.title}
             </h1>
 
-          </div>
+            {/* Meta */}
+            <div className="mt-8 flex flex-wrap gap-6 text-slate-300 text-lg">
 
-          {/* Owner Actions */}
-          {isOwner && (
+              <div className="flex items-center gap-2">
+                📍 {event.location}
+              </div>
 
-            <div className="flex gap-3">
+              <div className="flex items-center gap-2">
+                📅 {
+                  new Date(event.date)
+                    .toLocaleDateString()
+                }
+              </div>
 
-              <button
-  onClick={() =>
-    router.push(`/events/${id}/edit`)
-  }
-  className="px-5 py-3 rounded-xl bg-slate-800 hover:bg-slate-700 transition"
->
-  Edit
-</button>
-
-              <button
-                onClick={handleDelete}
-                className="px-5 py-3 rounded-xl bg-red-500 hover:bg-red-600 transition"
-              >
-                Delete
-              </button>
+              <div className="flex items-center gap-2">
+                👤 {
+                  event.createdBy?.name
+                  || "Organizer"
+                }
+              </div>
 
             </div>
 
-          )}
-
-        </div>
-
-        {/* Meta */}
-        <div className="mt-8 flex flex-wrap gap-8 text-slate-400">
-
-          <div>
-            📍 {event.location}
-          </div>
-
-          <div>
-            📅 {
-              new Date(event.date)
-                .toLocaleDateString()
-            }
-          </div>
-
-          <div>
-            👤 {event.createdBy?.name}
           </div>
 
         </div>
 
-        {/* Description */}
-        <div className="mt-12">
+      </section>
 
-          <h2 className="text-2xl font-semibold">
-            About This Event
-          </h2>
+      {/* CONTENT */}
+      <section className="max-w-7xl mx-auto px-6 py-16">
 
-          <p className="mt-6 text-slate-300 leading-8 whitespace-pre-line">
-            {event.description}
-          </p>
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
+
+          {/* LEFT */}
+          <div className="lg:col-span-2">
+
+            {/* About */}
+            <div className="rounded-3xl border border-slate-800 bg-slate-900/60 backdrop-blur-md p-8">
+
+              <h2 className="text-3xl font-bold">
+                About This Event
+              </h2>
+
+              <p className="mt-8 text-slate-300 leading-9 whitespace-pre-line text-lg">
+                {event.description}
+              </p>
+
+            </div>
+
+          </div>
+
+          {/* RIGHT SIDEBAR */}
+          <div className="space-y-8">
+
+            {/* RSVP CARD */}
+            <div className="rounded-3xl border border-slate-800 bg-slate-900/60 backdrop-blur-md p-8 sticky top-28">
+
+              <h3 className="text-2xl font-bold">
+                Join This Event
+              </h3>
+
+              <p className="mt-4 text-slate-400 leading-7">
+                Participate and connect with
+                students across campus.
+              </p>
+
+             <RSVPButton
+  eventId={event._id}
+  isCreator={isCreator}
+   isRegistered={isRegistered}
+/>
+
+              {/* Details */}
+              <div className="mt-10 space-y-5 text-slate-300">
+
+                <div className="flex justify-between border-b border-slate-800 pb-4">
+                  <span>Date</span>
+
+                  <span>
+                    {
+                      new Date(event.date)
+                        .toLocaleDateString()
+                    }
+                  </span>
+                </div>
+
+                <div className="flex justify-between border-b border-slate-800 pb-4">
+                  <span>Location</span>
+
+                  <span>
+                    {event.location}
+                  </span>
+                </div>
+
+                <div className="flex justify-between">
+                  <span>Category</span>
+
+                  <span>
+                    {event.category}
+                  </span>
+                </div>
+
+              </div>
+
+            </div>
+
+          </div>
 
         </div>
 
-      </div>
+      </section>
 
     </main>
   );
