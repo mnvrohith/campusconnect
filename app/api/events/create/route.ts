@@ -53,40 +53,37 @@ export async function POST(req: Request) {
       );
 
     }
+/* CLUB VALIDATION */
+const existingClub = await Club.findById(club);
 
-    /* ADMIN CHECK */
-    if (user.role !== "admin") {
+if (!existingClub) {
 
-      return Response.json(
-        {
-          success: false,
-          message: "Admins only",
-        },
-        { status: 403 }
-      );
+  return Response.json(
+    {
+      success: false,
+      message: "Club not found",
+    },
+    { status: 404 }
+  );
 
-    }
+}
 
-    /* OPTIONAL CLUB VALIDATION */
-    if (club) {
+/* OWNER / ADMIN CHECK */
+if (
+  existingClub.owner.toString() !== user._id.toString() &&
+  user.role !== "admin"
+) {
 
-      const existingClub =
-        await Club.findById(club);
+  return Response.json(
+    {
+      success: false,
+      message: "Admins/Club Owners only",
+    },
+    { status: 403 }
+  );
 
-      if (!existingClub) {
-
-        return Response.json(
-          {
-            success: false,
-            message: "Club not found",
-          },
-          { status: 404 }
-        );
-
-      }
-
-    }
-
+}
+  
     const event = await Event.create({
       title,
       description,

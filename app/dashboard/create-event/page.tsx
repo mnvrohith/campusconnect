@@ -7,6 +7,8 @@ import {
 
 import { useRouter } from "next/navigation";
 
+
+
 export default function CreateEventPage() {
 
   const router = useRouter();
@@ -256,6 +258,25 @@ export default function CreateEventPage() {
           </p>
 
         </div>
+
+        <div className="mt-6 rounded-2xl border border-indigo-500/20 bg-indigo-500/10 p-5">
+
+  <p className="text-sm text-indigo-200 leading-7">
+
+    Official club events can only be created
+    inside clubs you own or manage.
+
+    <span className="block mt-2 text-slate-300">
+
+      Want to host a personal meetup, workshop,
+      study jam, or open event?
+      Choose <span className="font-semibold text-white">Individual Event</span>.
+
+    </span>
+
+  </p>
+
+</div>
 
         {/* Form */}
         <form

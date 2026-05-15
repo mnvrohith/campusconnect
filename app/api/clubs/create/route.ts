@@ -52,7 +52,8 @@ export async function POST(req: Request) {
     const club = await Club.create({
       ...body,
       createdBy: user._id,
-      approved: false,
+      owner: user._id,
+      status: "pending",
     });
 
     return NextResponse.json({

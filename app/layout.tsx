@@ -2,6 +2,7 @@ import "./globals.css";
 import Navbar from "@/components/layout/Navbar";
 import { ClerkProvider } from "@clerk/nextjs";
 import SyncUser from "@/components/auth/SyncUser";
+import Footer from "@/components/layout/Footer";
 
 export default function RootLayout({
   children,
@@ -15,6 +16,7 @@ export default function RootLayout({
         <SyncUser />
         <Navbar />
         {children}
+        <Footer />
       </body>
     </html>
     </ClerkProvider>
