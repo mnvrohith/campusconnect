@@ -89,6 +89,41 @@ export default async function EventsPage() {
                   {event.category || "General"}
                 </span>
 
+                {/* Club */}
+{
+  event.club && (
+
+    <div className="mt-4 flex items-center gap-3">
+
+      {
+        event.club.logoUrl && (
+
+          <img
+            src={event.club.logoUrl}
+            alt={event.club.name}
+            className="w-10 h-10 rounded-full object-cover border border-slate-700"
+          />
+
+        )
+      }
+
+      <div>
+
+        <p className="text-xs text-slate-500">
+          Organized by
+        </p>
+
+        <p className="text-sm font-medium text-slate-300">
+          {event.club.name}
+        </p>
+
+      </div>
+
+    </div>
+
+  )
+}
+
                 {/* Title */}
                 <h2 className="mt-5 text-2xl font-bold line-clamp-2">
                   {event.title}

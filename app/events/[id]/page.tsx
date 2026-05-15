@@ -124,7 +124,39 @@ if (userId) {
             <h1 className="mt-6 text-5xl md:text-7xl font-extrabold max-w-5xl leading-tight">
               {event.title}
             </h1>
+{
+  event.club && (
 
+    <div className="mt-6 flex items-center gap-4">
+
+      {
+        event.club.logoUrl && (
+
+          <img
+            src={event.club.logoUrl}
+            alt={event.club.name}
+            className="w-14 h-14 rounded-full object-cover border border-slate-700"
+          />
+
+        )
+      }
+
+      <div>
+
+        <p className="text-slate-500 text-sm">
+          Organized by
+        </p>
+
+        <h3 className="text-xl font-semibold">
+          {event.club.name}
+        </h3>
+
+      </div>
+
+    </div>
+
+  )
+}
             {/* Meta */}
             <div className="mt-8 flex flex-wrap gap-6 text-slate-300 text-lg">
 

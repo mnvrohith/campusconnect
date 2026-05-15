@@ -21,8 +21,9 @@ export async function GET(
     const event = await Event.findById(id)
       .populate(
         "createdBy",
-        "name email imageUrl clerkId"
-      );
+        "name email imageUrl"
+      )
+       .populate("club", "name logoUrl");
 
     if (!event) {
 

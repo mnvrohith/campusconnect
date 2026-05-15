@@ -66,6 +66,13 @@ export default function Navbar() {
               >
                 Create Event
               </Link>
+
+               <Link
+                href="/clubs/create"
+                className="hover:text-white transition"
+              >
+                Create Club
+              </Link>
             </>
           )}
 

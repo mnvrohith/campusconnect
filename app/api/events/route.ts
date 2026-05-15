@@ -12,11 +12,12 @@ export async function GET() {
     await connectDB();
 
     const events = await Event.find()
-      .sort({ createdAt: -1 })
       .populate(
         "createdBy",
-        "name email imageUrl clerkId"
-      );
+        "name"
+      )
+       .populate("club", "name logoUrl")
+  .sort({ createdAt: -1 });
 
     return Response.json({
       success: true,

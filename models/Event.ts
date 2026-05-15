@@ -35,6 +35,11 @@ const EventSchema = new Schema(
       default: "General",
     },
 
+    club: {
+  type: mongoose.Schema.Types.ObjectId,
+  ref: "Club",
+},
+
     createdBy: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",

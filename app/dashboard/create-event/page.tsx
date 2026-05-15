@@ -1,6 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import {
+  useEffect,
+  useState,
+} from "react";
 
 import { useRouter } from "next/navigation";
 
@@ -20,6 +23,9 @@ export default function CreateEventPage() {
   const [preview, setPreview] =
     useState("");
 
+  const [clubs, setClubs] =
+    useState([]);
+
   const [formData, setFormData] = useState({
     title: "",
     description: "",
@@ -27,17 +33,50 @@ export default function CreateEventPage() {
     date: "",
     category: "",
     imageUrl: "",
+    club: "",
   });
+
+  useEffect(() => {
+
+    async function fetchClubs() {
+
+      try {
+
+        const res = await fetch(
+          "/api/clubs"
+        );
+
+        const data =
+          await res.json();
+
+        setClubs(
+          data.clubs || []
+        );
+
+      } catch (error) {
+
+        console.log(error);
+
+      }
+
+    }
+
+    fetchClubs();
+
+  }, []);
 
   function handleChange(
     e: React.ChangeEvent<
-      HTMLInputElement | HTMLTextAreaElement
+      HTMLInputElement |
+      HTMLTextAreaElement |
+      HTMLSelectElement
     >
   ) {
 
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value,
+      [e.target.name]:
+        e.target.value,
     });
 
   }
@@ -50,45 +89,59 @@ export default function CreateEventPage() {
 
       setUploading(true);
 
-      const reader = new FileReader();
+      const reader =
+        new FileReader();
 
       return await new Promise<string>(
-        (resolve, reject) => {
+        (
+          resolve,
+          reject
+        ) => {
 
-          reader.readAsDataURL(image);
+          reader.readAsDataURL(
+            image
+          );
 
-          reader.onload = async () => {
+          reader.onload =
+            async () => {
 
-            try {
+              try {
 
-              const response = await fetch(
-                "/api/upload",
-                {
-                  method: "POST",
+                const response =
+                  await fetch(
+                    "/api/upload",
+                    {
+                      method:
+                        "POST",
 
-                  headers: {
-                    "Content-Type":
-                      "application/json",
-                  },
+                      headers: {
+                        "Content-Type":
+                          "application/json",
+                      },
 
-                  body: JSON.stringify({
-                    file: reader.result,
-                  }),
-                }
-              );
+                      body: JSON.stringify(
+                        {
+                          file:
+                            reader.result,
+                        }
+                      ),
+                    }
+                  );
 
-              const data =
-                await response.json();
+                const data =
+                  await response.json();
 
-              resolve(data.imageUrl);
+                resolve(
+                  data.imageUrl
+                );
 
-            } catch (error) {
+              } catch (error) {
 
-              reject(error);
+                reject(error);
 
-            }
+              }
 
-          };
+            };
 
         }
       );
@@ -120,22 +173,23 @@ export default function CreateEventPage() {
       const imageUrl =
         await uploadImage();
 
-      const response = await fetch(
-        "/api/events/create",
-        {
-          method: "POST",
+      const response =
+        await fetch(
+          "/api/events/create",
+          {
+            method: "POST",
 
-          headers: {
-            "Content-Type":
-              "application/json",
-          },
+            headers: {
+              "Content-Type":
+                "application/json",
+            },
 
-          body: JSON.stringify({
-            ...formData,
-            imageUrl,
-          }),
-        }
-      );
+            body: JSON.stringify({
+              ...formData,
+              imageUrl,
+            }),
+          }
+        );
 
       const data =
         await response.json();
@@ -146,11 +200,15 @@ export default function CreateEventPage() {
           "Event created successfully!"
         );
 
-        router.push("/events");
+        router.push(
+          "/events"
+        );
 
       } else {
 
-        alert("Something went wrong");
+        alert(
+          data.message
+        );
 
       }
 
@@ -158,7 +216,9 @@ export default function CreateEventPage() {
 
       console.log(error);
 
-      alert("Error creating event");
+      alert(
+        "Error creating event"
+      );
 
     } finally {
 
@@ -169,41 +229,61 @@ export default function CreateEventPage() {
   }
 
   return (
-    <main className="min-h-screen px-6 py-16 bg-[#020617] text-white">
+    <main className="min-h-screen bg-[#020617] text-white px-6 py-20">
 
-      <div className="max-w-3xl mx-auto">
+      <div className="max-w-4xl mx-auto">
 
-        <div className="mb-10">
+        {/* Heading */}
+        <div className="text-center">
 
-          <h1 className="text-5xl font-bold">
+          <span className="px-4 py-2 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-indigo-300 text-sm">
+
+            CampusConnect
+
+          </span>
+
+          <h1 className="mt-8 text-5xl font-black tracking-tight">
+
             Create Event
+
           </h1>
 
-          <p className="mt-4 text-slate-400 text-lg">
-            Publish and showcase your
-            campus event beautifully.
+          <p className="mt-5 text-slate-400 text-lg">
+
+            Publish beautiful official
+            campus events.
+
           </p>
 
         </div>
 
+        {/* Form */}
         <form
-          onSubmit={handleSubmit}
-          className="space-y-8 rounded-3xl border border-slate-800 bg-slate-900/60 p-8 backdrop-blur-md"
+          onSubmit={
+            handleSubmit
+          }
+          className="mt-14 space-y-8 rounded-[32px] border border-slate-800 bg-slate-900/70 backdrop-blur-xl p-8 md:p-10 shadow-2xl"
         >
 
           {/* Title */}
           <div>
 
             <label className="block mb-3 text-sm text-slate-300">
+
               Event Title
+
             </label>
 
             <input
               type="text"
               name="title"
               required
-              value={formData.title}
-              onChange={handleChange}
+              value={
+                formData.title
+              }
+              onChange={
+                handleChange
+              }
               placeholder="Hackathon 2026"
               className="w-full rounded-2xl bg-slate-950 border border-slate-700 px-5 py-4 outline-none focus:border-indigo-500"
             />
@@ -214,14 +294,20 @@ export default function CreateEventPage() {
           <div>
 
             <label className="block mb-3 text-sm text-slate-300">
+
               Description
+
             </label>
 
             <textarea
               name="description"
               required
-              value={formData.description}
-              onChange={handleChange}
+              value={
+                formData.description
+              }
+              onChange={
+                handleChange
+              }
               placeholder="Describe your event..."
               rows={6}
               className="w-full rounded-2xl bg-slate-950 border border-slate-700 px-5 py-4 outline-none focus:border-indigo-500"
@@ -229,66 +315,149 @@ export default function CreateEventPage() {
 
           </div>
 
-          {/* Location */}
-          <div>
+          {/* Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
 
-            <label className="block mb-3 text-sm text-slate-300">
-              Location
-            </label>
+            {/* Location */}
+            <div>
 
-            <input
-              type="text"
-              name="location"
-              required
-              value={formData.location}
-              onChange={handleChange}
-              placeholder="NIT DGP"
-              className="w-full rounded-2xl bg-slate-950 border border-slate-700 px-5 py-4 outline-none focus:border-indigo-500"
-            />
+              <label className="block mb-3 text-sm text-slate-300">
+
+                Location
+
+              </label>
+
+              <input
+                type="text"
+                name="location"
+                required
+                value={
+                  formData.location
+                }
+                onChange={
+                  handleChange
+                }
+                placeholder="NIT DGP"
+                className="w-full rounded-2xl bg-slate-950 border border-slate-700 px-5 py-4 outline-none focus:border-indigo-500"
+              />
+
+            </div>
+
+            {/* Date */}
+            <div>
+
+              <label className="block mb-3 text-sm text-slate-300">
+
+                Event Date
+
+              </label>
+
+              <input
+                type="date"
+                name="date"
+                required
+                value={
+                  formData.date
+                }
+                onChange={
+                  handleChange
+                }
+                className="w-full rounded-2xl bg-slate-950 border border-slate-700 px-5 py-4 outline-none focus:border-indigo-500"
+              />
+
+            </div>
 
           </div>
 
-          {/* Date */}
-          <div>
+          {/* Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
 
-            <label className="block mb-3 text-sm text-slate-300">
-              Event Date
-            </label>
+            {/* Category */}
+            <div>
 
-            <input
-              type="date"
-              name="date"
-              required
-              value={formData.date}
-              onChange={handleChange}
-              className="w-full rounded-2xl bg-slate-950 border border-slate-700 px-5 py-4 outline-none focus:border-indigo-500"
-            />
+              <label className="block mb-3 text-sm text-slate-300">
+
+                Category
+
+              </label>
+
+              <input
+                type="text"
+                name="category"
+                value={
+                  formData.category
+                }
+                onChange={
+                  handleChange
+                }
+                placeholder="Tech / Cultural"
+                className="w-full rounded-2xl bg-slate-950 border border-slate-700 px-5 py-4 outline-none focus:border-indigo-500"
+              />
+
+            </div>
+
+            {/* Club */}
+            <div>
+
+              <label className="block mb-3 text-sm text-slate-300">
+
+                Organizing Club
+
+              </label>
+
+              <select
+                name="club"
+                value={
+                  formData.club
+                }
+                onChange={
+                  handleChange
+                }
+                className="w-full rounded-2xl bg-slate-950 border border-slate-700 px-5 py-4 outline-none focus:border-indigo-500"
+              >
+
+                <option value="">
+
+                  Select Club
+
+                </option>
+
+                {
+                  clubs.map(
+                    (
+                      club: any
+                    ) => (
+
+                      <option
+                        key={
+                          club._id
+                        }
+                        value={
+                          club._id
+                        }
+                      >
+                        {
+                          club.name
+                        }
+                      </option>
+
+                    )
+                  )
+                }
+
+              </select>
+
+            </div>
 
           </div>
 
-          {/* Category */}
+          {/* Upload */}
           <div>
 
             <label className="block mb-3 text-sm text-slate-300">
-              Category
-            </label>
 
-            <input
-              type="text"
-              name="category"
-              value={formData.category}
-              onChange={handleChange}
-              placeholder="Tech / Cultural / Sports"
-              className="w-full rounded-2xl bg-slate-950 border border-slate-700 px-5 py-4 outline-none focus:border-indigo-500"
-            />
-
-          </div>
-
-          {/* Image Upload */}
-          <div>
-
-            <label className="block mb-3 text-sm text-slate-300">
               Event Poster
+
             </label>
 
             <input
@@ -297,44 +466,53 @@ export default function CreateEventPage() {
               onChange={(e) => {
 
                 const file =
-                  e.target.files?.[0];
+                  e.target
+                    .files?.[0];
 
                 if (file) {
 
                   setImage(file);
 
                   setPreview(
-                    URL.createObjectURL(file)
+                    URL.createObjectURL(
+                      file
+                    )
                   );
 
                 }
 
               }}
-              className="w-full rounded-2xl bg-slate-950 border border-slate-700 px-5 py-4 file:mr-4 file:rounded-lg file:border-0 file:bg-indigo-500 file:px-4 file:py-2 file:text-white hover:file:bg-indigo-600"
+              className="w-full rounded-2xl bg-slate-950 border border-slate-700 px-5 py-4 file:mr-4 file:rounded-xl file:border-0 file:bg-indigo-500 file:px-4 file:py-2 file:text-white hover:file:bg-indigo-600"
             />
 
-            {/* Preview */}
-            {preview && (
+            {
+              preview && (
 
-              <div className="mt-6 overflow-hidden rounded-2xl border border-slate-800">
+                <div className="mt-6 overflow-hidden rounded-3xl border border-slate-800">
 
-                <img
-                  src={preview}
-                  alt="Preview"
-                  className="w-full h-[300px] object-cover"
-                />
+                  <img
+                    src={
+                      preview
+                    }
+                    alt="Preview"
+                    className="w-full h-[320px] object-cover"
+                  />
 
-              </div>
+                </div>
 
-            )}
+              )
+            }
 
           </div>
 
           {/* Submit */}
           <button
             type="submit"
-            disabled={loading || uploading}
-            className="w-full rounded-2xl bg-indigo-500 py-4 text-lg font-semibold hover:bg-indigo-600 transition disabled:opacity-50"
+            disabled={
+              loading ||
+              uploading
+            }
+            className="w-full rounded-2xl bg-indigo-500 py-4 text-lg font-bold hover:bg-indigo-600 transition disabled:opacity-50"
           >
 
             {
@@ -353,4 +531,5 @@ export default function CreateEventPage() {
 
     </main>
   );
+
 }

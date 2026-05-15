@@ -4,6 +4,7 @@ import { connectDB } from "@/lib/mongodb";
 
 import User from "@/models/User";
 import Event from "@/models/Event";
+import Club from "@/models/Club";
 
 export async function POST(req: Request) {
 
@@ -12,10 +13,15 @@ export async function POST(req: Request) {
     const { userId } = await auth();
 
     if (!userId) {
+
       return Response.json(
-        { error: "Unauthorized" },
+        {
+          success: false,
+          message: "Unauthorized",
+        },
         { status: 401 }
       );
+
     }
 
     const body = await req.json();
@@ -27,6 +33,7 @@ export async function POST(req: Request) {
       date,
       imageUrl,
       category,
+      club,
     } = body;
 
     await connectDB();
@@ -36,10 +43,48 @@ export async function POST(req: Request) {
     });
 
     if (!user) {
+
       return Response.json(
-        { error: "User not found" },
+        {
+          success: false,
+          message: "User not found",
+        },
         { status: 404 }
       );
+
+    }
+
+    /* ADMIN CHECK */
+    if (user.role !== "admin") {
+
+      return Response.json(
+        {
+          success: false,
+          message: "Admins only",
+        },
+        { status: 403 }
+      );
+
+    }
+
+    /* OPTIONAL CLUB VALIDATION */
+    if (club) {
+
+      const existingClub =
+        await Club.findById(club);
+
+      if (!existingClub) {
+
+        return Response.json(
+          {
+            success: false,
+            message: "Club not found",
+          },
+          { status: 404 }
+        );
+
+      }
+
     }
 
     const event = await Event.create({
@@ -49,6 +94,7 @@ export async function POST(req: Request) {
       date,
       imageUrl,
       category,
+      club,
       createdBy: user._id,
     });
 
@@ -64,7 +110,7 @@ export async function POST(req: Request) {
     return Response.json(
       {
         success: false,
-        error,
+        message: "Server Error",
       },
       { status: 500 }
     );
