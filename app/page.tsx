@@ -47,7 +47,7 @@ export default function HomePage() {
               href="/clubs"
               className="px-8 py-4 rounded-xl border border-slate-700 hover:border-indigo-400 hover:bg-slate-900 transition font-semibold"
             >
-              Create Club
+              Explore Clubs
             </Link>
 
           </div>

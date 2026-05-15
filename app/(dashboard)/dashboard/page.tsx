@@ -6,6 +6,7 @@ import { connectDB } from "@/lib/mongodb";
 
 import User from "@/models/User";
 import Event from "@/models/Event";
+import Club from "@/models/Club";
 
 export default async function DashboardPage() {
 
@@ -48,6 +49,10 @@ export default async function DashboardPage() {
   })
     .populate("attendees", "name email")
     .sort({ createdAt: -1 });
+
+  const createdClubs = await Club.find({
+    createdBy: user._id,
+  }).sort({ createdAt: -1 });
 
   return (
 
@@ -103,6 +108,18 @@ export default async function DashboardPage() {
 
                 <h2 className="mt-4 text-5xl font-black text-cyan-400">
                   {createdEvents.length}
+                </h2>
+
+              </div>
+
+              <div className="rounded-3xl border border-slate-800 bg-slate-900/80 backdrop-blur-xl p-8 min-w-[220px]">
+
+                <p className="text-slate-400 text-sm">
+                  Created Clubs
+                </p>
+
+                <h2 className="mt-4 text-5xl font-black text-green-400">
+                  {createdClubs.length}
                 </h2>
 
               </div>
