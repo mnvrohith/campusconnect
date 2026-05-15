@@ -101,6 +101,20 @@ export default function CreateClubPage() {
           <p className="mt-5 text-slate-400 text-lg">
             Submit your club for admin approval.
           </p>
+           {/* Notice */}
+        <div className="mb-10 rounded-3xl border border-amber-500/20 bg-amber-500/10 p-6">
+
+         
+
+          <p className="mt-3 text-slate-300 leading-7">
+
+            Clubs are reviewed
+            by admins before being published
+            to maintain quality and avoid spam.
+
+          </p>
+
+        </div>
 
         </div>
 

@@ -7,7 +7,7 @@ import {
 
 import { useRouter } from "next/navigation";
 
-
+import Link from "next/link";
 
 export default function CreateEventPage() {
 
@@ -268,9 +268,16 @@ export default function CreateEventPage() {
 
     <span className="block mt-2 text-slate-300">
 
-      Want to host a personal meetup, workshop,
-      study jam, or open event?
-      Choose <span className="font-semibold text-white">Individual Event</span>.
+      If you want to host a personal meetup, workshop,
+      study jam, or open event? 
+      {/* COMMUNITY EVENT */}
+                <Link
+                  href="/dashboard/create-community-event"
+                  className=" font-semibold text-white"
+                >
+                   click here
+                </Link>
+      
 
     </span>
 

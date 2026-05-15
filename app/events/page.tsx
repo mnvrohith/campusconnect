@@ -13,170 +13,416 @@ async function getEvents() {
 
 }
 
+async function getCommunityEvents() {
+
+  const res = await fetch(
+    "http://localhost:3000/api/community-events",
+    {
+      cache: "no-store",
+    }
+  );
+
+  return res.json();
+
+}
+
 export default async function EventsPage() {
 
   const data = await getEvents();
 
   const events = data.events || [];
 
+  const communityData =
+    await getCommunityEvents();
+
+  const communityEvents =
+    communityData.events || [];
+
   return (
+
     <main className="min-h-screen bg-[#020617] text-white px-6 py-14">
 
-      {/* Header */}
       <div className="max-w-7xl mx-auto">
 
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+        {/* HERO */}
+        <section>
 
-          <div>
+          <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-8">
 
-            <h1 className="text-5xl font-bold">
-              Explore Events
-            </h1>
+            <div>
 
-            <p className="mt-4 text-slate-400 text-lg">
-              Discover workshops, hackathons,
-              cultural fests, sports, and more.
-            </p>
+              <span className="text-indigo-400 font-semibold uppercase tracking-wider">
+                CampusConnect
+              </span>
+
+              <h1 className="mt-4 text-5xl md:text-7xl font-black leading-tight">
+                Explore
+                <span className="block text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-cyan-400">
+                  Campus Events
+                </span>
+              </h1>
+
+              <p className="mt-8 text-slate-400 text-lg leading-8 max-w-3xl">
+                Discover hackathons, workshops, cultural fests,
+                coding competitions, sports events, meetups,
+                networking sessions, and student-led activities.
+              </p>
+
+            </div>
+
+            <div className="flex flex-wrap gap-4">
+
+              <Link
+                href="/dashboard/create-event"
+                className="px-6 py-4 rounded-2xl bg-indigo-500 hover:bg-indigo-600 transition font-semibold"
+              >
+                + Create Club Event
+              </Link>
+
+              <Link
+                href="/dashboard/create-community-event"
+                className="px-6 py-4 rounded-2xl border border-cyan-500/40 bg-cyan-500/10 hover:bg-cyan-500/20 transition font-semibold text-cyan-300"
+              >
+                + Create Community Event
+              </Link>
+
+            </div>
 
           </div>
 
-          <Link
-            href="/create-event"
-            className="px-6 py-4 rounded-2xl bg-indigo-500 hover:bg-indigo-600 transition font-semibold w-fit"
-          >
-            + Create Event
-          </Link>
+        </section>
 
-        </div>
+        {/* CLUB EVENTS */}
+        <section className="mt-20">
 
-        {/* Events Grid */}
-        <div className="mt-14 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
+          <div className="flex items-end justify-between gap-6 flex-wrap">
 
-          {events.map((event: any) => (
+            <div>
 
-            <Link
-              key={event._id}
-              href={`/events/${event._id}`}
-              className="group rounded-3xl overflow-hidden border border-slate-800 bg-slate-900/60 hover:border-indigo-500/40 transition-all duration-300 hover:-translate-y-2"
-            >
+              <span className="text-indigo-400 font-semibold uppercase tracking-wider">
+                Official Organizations
+              </span>
 
-              {/* Image */}
-              <div className="h-56 overflow-hidden bg-slate-800">
+              <h2 className="mt-3 text-5xl font-black">
+                Club Events
+              </h2>
 
-                {event.imageUrl ? (
+              <p className="mt-5 text-slate-400 text-lg max-w-2xl leading-8">
+                Official events organized by approved campus clubs,
+                technical societies, cultural communities,
+                sports teams, and student organizations.
+              </p>
 
-                  <img
-                    src={event.imageUrl}
-                    alt={event.title}
-                    className="w-full h-full object-cover group-hover:scale-105 transition duration-500"
-                  />
+            </div>
 
-                ) : (
+          </div>
 
-                  <div className="w-full h-full flex items-center justify-center text-slate-500">
-                    No Image
-                  </div>
+          {
+            events.length === 0 ? (
 
-                )}
+              <div className="mt-12 rounded-3xl border border-dashed border-slate-700 bg-slate-900/50 p-16 text-center">
 
-              </div>
+                <h3 className="text-3xl font-bold">
+                  No Events Yet
+                </h3>
 
-              {/* Content */}
-              <div className="p-6">
-
-                {/* Category */}
-                <span className="inline-block px-4 py-1 rounded-full bg-indigo-500/20 text-indigo-300 text-sm">
-                  {event.category || "General"}
-                </span>
-
-                {/* Club */}
-{
-  event.club && (
-
-    <div className="mt-4 flex items-center gap-3">
-
-      {
-        event.club.logoUrl && (
-
-          <img
-            src={event.club.logoUrl}
-            alt={event.club.name}
-            className="w-10 h-10 rounded-full object-cover border border-slate-700"
-          />
-
-        )
-      }
-
-      <div>
-
-        <p className="text-xs text-slate-500">
-          Organized by
-        </p>
-
-        <p className="text-sm font-medium text-slate-300">
-          {event.club.name}
-        </p>
-
-      </div>
-
-    </div>
-
-  )
-}
-
-                {/* Title */}
-                <h2 className="mt-5 text-2xl font-bold line-clamp-2">
-                  {event.title}
-                </h2>
-
-                {/* Description */}
-                <p className="mt-4 text-slate-400 line-clamp-3 leading-7">
-                  {event.description}
+                <p className="mt-4 text-slate-400">
+                  Club events will appear here.
                 </p>
 
-                {/* Footer */}
-                <div className="mt-8 flex items-center justify-between text-sm text-slate-400">
+              </div>
 
-                  <div>
-                    📍 {event.location}
-                  </div>
+            ) : (
 
-                  <div>
-                    📅 {
-                      new Date(event.date)
-                        .toLocaleDateString()
-                    }
-                  </div>
+              <div className="mt-14 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-10">
 
-                </div>
+                {
+                  events.map((event: any) => (
+
+                    <Link
+                      key={event._id}
+                      href={`/events/${event._id}`}
+                      className="group rounded-[32px] overflow-hidden border border-slate-800 bg-slate-900/60 hover:border-indigo-500/40 transition-all duration-300 hover:-translate-y-2"
+                    >
+
+                      {/* IMAGE */}
+                      <div className="relative h-64 overflow-hidden bg-slate-800">
+
+                        {
+                          event.imageUrl ? (
+
+                            <img
+                              src={event.imageUrl}
+                              alt={event.title}
+                              className="w-full h-full object-cover group-hover:scale-105 transition duration-500"
+                            />
+
+                          ) : (
+
+                            <div className="w-full h-full flex items-center justify-center text-slate-500">
+                              No Image
+                            </div>
+
+                          )
+                        }
+
+                        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent" />
+
+                        <div className="absolute top-5 left-5">
+
+                          <span className="px-4 py-2 rounded-full bg-indigo-500/20 border border-indigo-500/30 text-indigo-300 text-sm font-medium">
+                            {event.category || "General"}
+                          </span>
+
+                        </div>
+
+                      </div>
+
+                      {/* CONTENT */}
+                      <div className="p-8">
+
+                        {/* CLUB */}
+                        {
+                          event.club && (
+
+                            <div className="flex items-center gap-4">
+
+                              {
+                                event.club.logoUrl && (
+
+                                  <img
+                                    src={event.club.logoUrl}
+                                    alt={event.club.name}
+                                    className="w-12 h-12 rounded-full object-cover border border-slate-700"
+                                  />
+
+                                )
+                              }
+
+                              <div>
+
+                                <p className="text-xs text-slate-500">
+                                  Organized by
+                                </p>
+
+                                <p className="text-sm font-medium text-slate-300">
+                                  {event.club.name}
+                                </p>
+
+                              </div>
+
+                            </div>
+
+                          )
+                        }
+
+                        {/* TITLE */}
+                        <h2 className="mt-6 text-3xl font-black line-clamp-2">
+                          {event.title}
+                        </h2>
+
+                        {/* DESCRIPTION */}
+                        <p className="mt-5 text-slate-400 line-clamp-4 leading-7">
+                          {event.description}
+                        </p>
+
+                        {/* FOOTER */}
+                        <div className="mt-8 pt-6 border-t border-slate-800 flex items-center justify-between text-sm">
+
+                          <div className="text-slate-400">
+                            📍 {event.location}
+                          </div>
+
+                          <div className="text-slate-400">
+                            📅 {
+                              new Date(
+                                event.date
+                              ).toLocaleDateString()
+                            }
+                          </div>
+
+                        </div>
+
+                      </div>
+
+                    </Link>
+
+                  ))
+                }
 
               </div>
 
-            </Link>
+            )
+          }
 
-          ))}
+        </section>
 
-        </div>
+        {/* COMMUNITY EVENTS */}
+        <section className="mt-28">
 
-        {/* Empty State */}
-        {events.length === 0 && (
+          <div className="flex items-end justify-between gap-6 flex-wrap">
 
-          <div className="mt-24 text-center">
+            <div>
 
-            <h2 className="text-3xl font-bold">
-              No Events Yet
-            </h2>
+              <span className="text-cyan-400 font-semibold uppercase tracking-wider">
+                Open Campus Events
+              </span>
 
-            <p className="mt-4 text-slate-400">
-              Create your first campus event.
-            </p>
+              <h2 className="mt-3 text-5xl font-black">
+                Community Events
+              </h2>
+
+              <p className="mt-5 text-slate-400 text-lg max-w-2xl leading-8">
+                Open events created by students for networking,
+                study groups, gaming, discussions, creativity,
+                collaboration, and campus engagement.
+              </p>
+
+            </div>
 
           </div>
 
-        )}
+          {
+            communityEvents.length === 0 ? (
+
+              <div className="mt-12 rounded-3xl border border-dashed border-slate-700 bg-slate-900/50 p-16 text-center">
+
+                <h3 className="text-3xl font-bold">
+                  No Community Events Yet
+                </h3>
+
+                <p className="mt-4 text-slate-400">
+                  Approved community events will appear here.
+                </p>
+
+              </div>
+
+            ) : (
+
+              <div className="mt-14 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-10">
+
+                {
+                  communityEvents.map((event: any) => (
+
+                    <div
+                      key={event._id}
+                      className="group overflow-hidden rounded-[32px] border border-slate-800 bg-slate-900 hover:border-cyan-500/40 transition duration-300"
+                    >
+
+                      {/* IMAGE */}
+                      <div className="relative h-64 overflow-hidden">
+
+                        <img
+                          src={event.imageUrl}
+                          alt={event.title}
+                          className="w-full h-full object-cover group-hover:scale-105 transition duration-500"
+                        />
+
+                        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent" />
+
+                        <div className="absolute top-5 left-5">
+
+                          <span className="px-4 py-2 rounded-full bg-cyan-500/20 border border-cyan-500/30 text-cyan-300 text-sm font-medium">
+                            Community Event
+                          </span>
+
+                        </div>
+
+                      </div>
+
+                      {/* CONTENT */}
+                      <div className="p-8">
+
+                        <h3 className="text-3xl font-black line-clamp-2">
+                          {event.title}
+                        </h3>
+
+                        <p className="mt-5 text-slate-400 leading-7 line-clamp-4">
+                          {event.description}
+                        </p>
+
+                        {/* INFO */}
+                        <div className="mt-8 space-y-4 text-sm">
+
+                          <div className="flex items-center justify-between">
+
+                            <span className="text-slate-500">
+                              Location
+                            </span>
+
+                            <span className="font-medium">
+                              {event.location}
+                            </span>
+
+                          </div>
+
+                          <div className="flex items-center justify-between">
+
+                            <span className="text-slate-500">
+                              Date
+                            </span>
+
+                            <span className="font-medium">
+
+                              {
+                                new Date(
+                                  event.date
+                                ).toLocaleDateString()
+                              }
+
+                            </span>
+
+                          </div>
+
+                          <div className="flex items-center justify-between">
+
+                            <span className="text-slate-500">
+                              Time
+                            </span>
+
+                            <span className="font-medium">
+                              {event.startTime} - {event.endTime}
+                            </span>
+
+                          </div>
+
+                        </div>
+
+                        {/* CREATOR */}
+                        <div className="mt-8 pt-6 border-t border-slate-800 flex items-center justify-between">
+
+                          <div>
+
+                            <p className="text-sm text-slate-500">
+                              Hosted By
+                            </p>
+
+                            <h4 className="mt-1 font-semibold">
+                              {event.createdBy?.name}
+                            </h4>
+
+                          </div>
+
+                        </div>
+
+                      </div>
+
+                    </div>
+
+                  ))
+                }
+
+              </div>
+
+            )
+          }
+
+        </section>
 
       </div>
 
     </main>
+
   );
+
 }

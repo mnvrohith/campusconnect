@@ -60,19 +60,7 @@ export default function Navbar() {
                 Dashboard
               </Link>
 
-              <Link
-                href="/dashboard/create-event"
-                className="hover:text-white transition"
-              >
-                Create Event
-              </Link>
-
-               <Link
-                href="/clubs/create"
-                className="hover:text-white transition"
-              >
-                Create Club
-              </Link>
+             
             </>
           )}
 
