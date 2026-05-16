@@ -4,6 +4,7 @@ import { connectDB } from "@/lib/mongodb";
 
 import Event from "@/models/Event";
 import User from "@/models/User";
+import Club from "@/models/Club";
 
 export async function GET() {
 

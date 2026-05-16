@@ -146,37 +146,53 @@ export default async function EventsPage() {
                     >
 
                       {/* IMAGE */}
-                      <div className="relative h-64 overflow-hidden bg-slate-800">
+<div className="relative aspect-[4/5] overflow-hidden bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950">
 
-                        {
-                          event.imageUrl ? (
+  {/* Glow */}
+  <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/10 via-transparent to-cyan-500/10 z-0" />
 
-                            <img
-                              src={event.imageUrl}
-                              alt={event.title}
-                              className="w-full h-full object-cover group-hover:scale-105 transition duration-500"
-                            />
+  {
+    event.imageUrl ? (
 
-                          ) : (
+      <img
+        src={event.imageUrl}
+        alt={event.title}
+        className="relative z-10 w-full h-full object-contain p-3 group-hover:scale-[1.03] transition duration-500"
+      />
 
-                            <div className="w-full h-full flex items-center justify-center text-slate-500">
-                              No Image
-                            </div>
+    ) : (
 
-                          )
-                        }
+      <div className="w-full h-full flex flex-col items-center justify-center text-slate-500 relative z-10">
 
-                        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent" />
+        <div className="w-20 h-20 rounded-full bg-slate-800 flex items-center justify-center text-3xl">
+          🎉
+        </div>
 
-                        <div className="absolute top-5 left-5">
+        <p className="mt-4 text-sm">
+          No Poster Uploaded
+        </p>
 
-                          <span className="px-4 py-2 rounded-full bg-indigo-500/20 border border-indigo-500/30 text-indigo-300 text-sm font-medium">
-                            {event.category || "General"}
-                          </span>
+      </div>
 
-                        </div>
+    )
+  }
 
-                      </div>
+  {/* Top Fade */}
+  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-transparent z-20" />
+
+  {/* Glass Category Badge */}
+  <div className="absolute top-5 left-5 z-30">
+
+    <span className="px-4 py-2 rounded-full bg-black/40 backdrop-blur-xl border border-white/10 text-indigo-200 text-sm font-medium shadow-lg shadow-indigo-500/10">
+      {event.category || "General"}
+    </span>
+
+  </div>
+
+  {/* Bottom Glow */}
+  <div className="absolute -bottom-16 left-1/2 -translate-x-1/2 w-52 h-52 bg-indigo-500/20 blur-3xl rounded-full z-0" />
+
+</div>
 
                       {/* CONTENT */}
                       <div className="p-8">

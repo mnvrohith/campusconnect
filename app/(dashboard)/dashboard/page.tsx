@@ -7,6 +7,7 @@ import { connectDB } from "@/lib/mongodb";
 import User from "@/models/User";
 import Event from "@/models/Event";
 import Club from "@/models/Club";
+import CommunityEvent from "@/models/CommunityEvent";
 
 export default async function DashboardPage() {
 
@@ -49,6 +50,11 @@ export default async function DashboardPage() {
   })
     .populate("attendees", "name email")
     .sort({ createdAt: -1 });
+
+  const createdCommunityEvents =
+  await CommunityEvent.find({
+    createdBy: user._id,
+  }).sort({ createdAt: -1 });  
 
   const createdClubs = await Club.find({
     createdBy: user._id,
@@ -164,7 +170,7 @@ export default async function DashboardPage() {
         <div className="rounded-3xl border border-slate-800 bg-slate-900/80 backdrop-blur-xl p-8 min-w-[220px]">
 
           <p className="text-slate-400 text-sm">
-            Created Events
+            Created Club Events
           </p>
 
           <h2 className="mt-4 text-5xl font-black text-cyan-400">
@@ -173,13 +179,25 @@ export default async function DashboardPage() {
 
         </div>
 
-        <div className="rounded-3xl border border-slate-800 bg-slate-900/80 backdrop-blur-xl p-8 min-w-[220px] sm:col-span-2">
+         <div className="rounded-3xl border border-slate-800 bg-slate-900/80 backdrop-blur-xl p-8 min-w-[220px]">
+
+          <p className="text-slate-400 text-sm">
+            Created Community Events
+          </p>
+
+          <h2 className="mt-4 text-5xl font-black text-blue-500">
+            {createdCommunityEvents.length}
+          </h2>
+
+        </div>
+
+        <div className="rounded-3xl border border-slate-800 bg-slate-900/80 backdrop-blur-xl p-8 min-w-[220px] ">
 
           <p className="text-slate-400 text-sm">
             Created Clubs
           </p>
 
-          <h2 className="mt-4 text-5xl font-black text-green-400">
+          <h2 className="mt-4 text-5xl font-black text-indigo-500">
             {createdClubs.length}
           </h2>
 
@@ -315,7 +333,7 @@ export default async function DashboardPage() {
             </h2>
 
             <p className="mt-3 text-slate-400">
-              Track registrations for events created by you.
+              Track registrations for Club events created by you.
             </p>
 
           </div>
@@ -518,6 +536,140 @@ export default async function DashboardPage() {
           }
 
         </section>
+
+
+{/* COMMUNITY EVENTS CREATED */}
+<section className="mt-28">
+
+  <div>
+
+    <h2 className="text-4xl font-bold">
+      Community Events Created
+    </h2>
+
+    <p className="mt-3 text-slate-400">
+      Open events organized by you.
+    </p>
+
+  </div>
+
+  {
+    createdCommunityEvents.length === 0 ? (
+
+      <div className="mt-10 rounded-3xl border border-dashed border-slate-700 bg-slate-900/50 p-16 text-center">
+
+        <h3 className="text-2xl font-bold">
+          No Community Events Yet
+        </h3>
+
+        <p className="mt-4 text-slate-400">
+          Create open campus events for students.
+        </p>
+
+        <Link
+          href="/dashboard/create-community-event"
+          className="inline-block mt-8 px-6 py-3 rounded-2xl bg-cyan-500 hover:bg-cyan-600 transition font-semibold"
+        >
+          Create Community Event
+        </Link>
+
+      </div>
+
+    ) : (
+
+      <div className="mt-10 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
+
+        {
+          createdCommunityEvents.map((event: any) => (
+
+            <div
+              key={event._id}
+              className="group rounded-[32px] overflow-hidden border border-slate-800 bg-slate-900 hover:border-cyan-500/40 transition duration-300"
+            >
+
+              {/* IMAGE */}
+              <div className="relative aspect-[4/5] bg-slate-950 overflow-hidden">
+
+                <img
+                  src={event.imageUrl}
+                  alt={event.title}
+                  className="w-full h-full object-contain p-3 group-hover:scale-105 transition duration-500"
+                />
+
+                <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent" />
+
+                <div className="absolute top-5 left-5">
+
+                  <span className="px-4 py-2 rounded-full bg-cyan-500/20 border border-cyan-500/30 text-cyan-300 text-sm">
+                    Community Event
+                  </span>
+
+                </div>
+
+              </div>
+
+              {/* CONTENT */}
+              <div className="p-7">
+
+                <h3 className="text-2xl font-bold">
+                  {event.title}
+                </h3>
+
+                <p className="mt-4 text-slate-400 line-clamp-3">
+                  {event.description}
+                </p>
+
+                <div className="mt-6 flex items-center justify-between text-sm text-slate-500">
+
+                  <span>
+                    📍 {event.location}
+                  </span>
+
+                  <span>
+                    📅 {
+                      new Date(event.date)
+                        .toLocaleDateString()
+                    }
+                  </span>
+
+                </div>
+
+                <div className="mt-4 text-sm text-cyan-400">
+
+                  {event.startTime} - {event.endTime}
+
+                </div>
+
+                <div className="mt-6">
+
+                  <span
+                    className={`px-4 py-2 rounded-full text-sm ${
+                      event.status === "approved"
+                        ? "bg-green-500/20 text-green-300"
+                        : "bg-yellow-500/20 text-yellow-300"
+                    }`}
+                  >
+                    {event.status}
+                  </span>
+
+                </div>
+
+              </div>
+
+            </div>
+
+          ))
+        }
+
+      </div>
+
+    )
+  }
+
+</section>
+
+
+
 
         {/* CREATED CLUBS */}
 <section className="mt-28">
