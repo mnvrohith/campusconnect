@@ -380,157 +380,202 @@ export default async function DashboardPage() {
 
             ) : (
 
-              <div className="mt-10 space-y-10">
+              <div className="mt-10 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
 
-                {
-                  createdEvents.map((event: any) => (
+  {
+    createdEvents.map((event: any) => (
 
-                    <div
-                      key={event._id}
-                      className="rounded-[32px] border border-slate-800 bg-slate-900 overflow-hidden"
-                    >
+      <div
+        key={event._id}
+        className="
+        group
+        overflow-hidden
+        rounded-[32px]
+        border border-slate-800
+        bg-slate-900/70
+        hover:border-indigo-500/40
+        transition-all duration-300
+        hover:-translate-y-2
+        relative
+      "
+      >
 
-                      {/* TOP */}
-                      <div className="relative h-72 overflow-hidden">
+        {/* GLOW */}
+        <div className="absolute inset-0 bg-indigo-500/0 group-hover:bg-indigo-500/5 transition duration-500" />
 
-                        <img
-                          src={event.imageUrl}
-                          alt={event.title}
-                          className="w-full h-full object-cover"
-                        />
+        {/* IMAGE */}
+        <div className="relative aspect-[4/5] bg-slate-950 overflow-hidden">
 
-                        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/30 to-transparent" />
+          {
+            event.imageUrl ? (
 
-                        <div className="absolute bottom-8 left-8 right-8 flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6">
+              <img
+                src={event.imageUrl}
+                alt={event.title}
+                className="w-full h-full object-contain p-3 group-hover:scale-105 transition duration-500"
+              />
 
-                          <div>
+            ) : (
 
-                            <span className="px-4 py-2 rounded-full bg-indigo-500/20 border border-indigo-500/30 text-indigo-300 text-sm">
-                              {event.category}
-                            </span>
-
-                            <h3 className="mt-5 text-4xl font-black">
-                              {event.title}
-                            </h3>
-
-                            <div className="mt-4 flex flex-wrap gap-6 text-slate-300">
-
-                              <span>
-                                📍 {event.location}
-                              </span>
-
-                              <span>
-                                📅 {new Date(event.date).toLocaleDateString()}
-                              </span>
-
-                            </div>
-
-                          </div>
-
-                          <div className="rounded-3xl bg-black/50 backdrop-blur-xl border border-white/10 px-8 py-6">
-
-                            <p className="text-slate-400 text-sm">
-                              Total Registrations
-                            </p>
-
-                            <h2 className="mt-2 text-5xl font-black text-indigo-400">
-                              {event.attendees.length}
-                            </h2>
-
-                          </div>
-
-                        </div>
-
-                      </div>
-
-                      {/* ATTENDEES */}
-                      <div className="p-8">
-
-                        <div className="flex items-center justify-between">
-
-                          <div>
-
-                            <h4 className="text-3xl font-bold">
-                              Registered Students
-                            </h4>
-
-                            <p className="mt-2 text-slate-400">
-                              Students who RSVP’d for this event.
-                            </p>
-
-                          </div>
-
-                        </div>
-
-                        {
-                          event.attendees.length === 0 ? (
-
-                            <div className="mt-8 rounded-2xl border border-dashed border-slate-700 p-10 text-center text-slate-500">
-                              No registrations yet.
-                            </div>
-
-                          ) : (
-
-                            <div className="mt-8 overflow-hidden rounded-2xl border border-slate-800">
-
-                              <table className="w-full">
-
-                                <thead className="bg-slate-950">
-
-                                  <tr className="text-left text-slate-400">
-
-                                    <th className="px-6 py-5 font-medium">
-                                      Student Name
-                                    </th>
-
-                                    <th className="px-6 py-5 font-medium">
-                                      Email Address
-                                    </th>
-
-                                  </tr>
-
-                                </thead>
-
-                                <tbody>
-
-                                  {
-                                    event.attendees.map((user: any) => (
-
-                                      <tr
-                                        key={user._id}
-                                        className="border-t border-slate-800 hover:bg-slate-800/40 transition"
-                                      >
-
-                                        <td className="px-6 py-5 font-medium">
-                                          {user.name}
-                                        </td>
-
-                                        <td className="px-6 py-5 text-slate-400">
-                                          {user.email}
-                                        </td>
-
-                                      </tr>
-
-                                    ))
-                                  }
-
-                                </tbody>
-
-                              </table>
-
-                            </div>
-
-                          )
-                        }
-
-                      </div>
-
-                    </div>
-
-                  ))
-                }
-
+              <div className="w-full h-full flex items-center justify-center text-slate-500">
+                No Poster
               </div>
+
+            )
+          }
+
+          <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent" />
+
+          {/* STATUS */}
+          <div className="absolute top-5 left-5">
+
+            <span
+              className={`px-4 py-2 rounded-full text-xs border backdrop-blur-md
+              ${
+                event.status === "upcoming"
+                  ? "bg-emerald-500/20 text-emerald-300 border-emerald-500/30"
+                  : event.status === "completed"
+                  ? "bg-blue-500/20 text-blue-300 border-blue-500/30"
+                  : "bg-red-500/20 text-red-300 border-red-500/30"
+              }`}
+            >
+              {event.status}
+            </span>
+
+          </div>
+
+          {/* CATEGORY */}
+          <div className="absolute bottom-5 left-5">
+
+            <span className="px-4 py-2 rounded-full bg-indigo-500/20 border border-indigo-500/30 text-indigo-300 text-sm font-medium">
+              {event.category}
+            </span>
+
+          </div>
+
+        </div>
+
+        {/* CONTENT */}
+        <div className="p-7">
+
+          <h3 className="text-2xl font-bold line-clamp-2">
+            {event.title}
+          </h3>
+
+          <p className="mt-4 text-slate-400 line-clamp-3 leading-7">
+            {event.description}
+          </p>
+
+          {/* META */}
+          <div className="mt-6 space-y-3 text-sm">
+
+            <div className="flex items-center justify-between text-slate-400">
+
+              <span>📍 Location</span>
+
+              <span className="text-white">
+                {event.location}
+              </span>
+
+            </div>
+
+            <div className="flex items-center justify-between text-slate-400">
+
+              <span>📅 Date</span>
+
+              <span className="text-white">
+                {new Date(event.date).toLocaleDateString()}
+              </span>
+
+            </div>
+
+            <div className="flex items-center justify-between text-slate-400">
+
+              <span>👥 Registrations</span>
+
+              <span className="text-indigo-400 font-semibold">
+                {event.attendees.length}
+              </span>
+
+            </div>
+
+          </div>
+
+          {/* ATTENDEES */}
+          <div className="mt-8">
+
+            <h4 className="text-lg font-semibold">
+              Registered Students
+            </h4>
+
+            {
+              event.attendees.length === 0 ? (
+
+                <div className="mt-4 rounded-2xl border border-dashed border-slate-700 p-6 text-center text-slate-500 text-sm">
+                  No registrations yet.
+                </div>
+
+              ) : (
+
+                <div className="mt-4 space-y-3 max-h-48 overflow-y-auto pr-2">
+
+                  {
+                    event.attendees.map((user: any) => (
+
+                      <div
+                        key={user._id}
+                        className="rounded-2xl border border-slate-800 bg-slate-950/70 p-4"
+                      >
+
+                        <p className="font-medium">
+                          {user.name}
+                        </p>
+
+                        <p className="text-sm text-slate-400 mt-1">
+                          {user.email}
+                        </p>
+
+                      </div>
+
+                    ))
+                  }
+
+                </div>
+
+              )
+            }
+
+          </div>
+
+          {/* ACTION BUTTONS */}
+          <div className="mt-8 flex gap-3">
+
+            {
+              event.status === "upcoming" && (
+
+                <>
+                  <button className="flex-1 rounded-xl bg-emerald-500 py-3 font-medium hover:bg-emerald-600 transition">
+                    Mark Completed
+                  </button>
+
+                  <button className="flex-1 rounded-xl bg-red-500/90 py-3 font-medium hover:bg-red-600 transition">
+                    Cancel
+                  </button>
+                </>
+
+              )
+            }
+
+          </div>
+
+        </div>
+
+      </div>
+
+    ))
+  }
+
+</div>
 
             )
           }

@@ -32,6 +32,8 @@ export default async function EventsPage() {
 
   const events = data.events || [];
 
+
+
   const communityData =
     await getCommunityEvents();
 
@@ -127,7 +129,7 @@ export default async function EventsPage() {
                 </h3>
 
                 <p className="mt-4 text-slate-400">
-                  Club events will appear here.
+                  club events will appear here.
                 </p>
 
               </div>
@@ -186,7 +188,39 @@ export default async function EventsPage() {
     <span className="px-4 py-2 rounded-full bg-black/40 backdrop-blur-xl border border-white/10 text-indigo-200 text-sm font-medium shadow-lg shadow-indigo-500/10">
       {event.category || "General"}
     </span>
+<div className="mt-3">
 
+  {
+    event.status === "upcoming" && (
+
+      <span className="px-3 py-1 rounded-full bg-emerald-500/20 border border-emerald-500/30 text-emerald-300 text-xs font-medium">
+        Upcoming
+      </span>
+
+    )
+  }
+
+  {
+    event.status === "completed" && (
+
+      <span className="px-3 py-1 rounded-full bg-blue-500/20 border border-blue-500/30 text-blue-300 text-xs font-medium">
+        Completed
+      </span>
+
+    )
+  }
+
+  {
+    event.status === "cancelled" && (
+
+      <span className="px-3 py-1 rounded-full bg-red-500/20 border border-red-500/30 text-red-300 text-xs font-medium">
+        Cancelled
+      </span>
+
+    )
+  }
+
+</div>
   </div>
 
   {/* Bottom Glow */}

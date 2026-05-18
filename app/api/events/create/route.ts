@@ -27,13 +27,21 @@ export async function POST(req: Request) {
     const body = await req.json();
 
     const {
-      title,
-      description,
-      location,
-      date,
-      imageUrl,
-      category,
-      club,
+       title,
+  description,
+  location,
+  date,
+
+  startTime,
+  endTime,
+
+  registrationDeadline,
+
+  mode,
+
+  imageUrl,
+  category,
+  club,
     } = body;
 
     await connectDB();
@@ -84,16 +92,33 @@ if (
 
 }
   
-    const event = await Event.create({
-      title,
-      description,
-      location,
-      date,
-      imageUrl,
-      category,
-      club,
-      createdBy: user._id,
-    });
+
+     const event = await Event.create({
+
+  title,
+  description,
+  location,
+
+  date,
+
+  startTime,
+  endTime,
+
+  registrationDeadline,
+
+  mode,
+
+  imageUrl,
+  category,
+
+  club,
+
+  createdBy: user._id,
+
+  status: "upcoming",
+
+});
+    
 
     return Response.json({
       success: true,

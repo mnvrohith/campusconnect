@@ -3,7 +3,7 @@ import mongoose, {
   models,
   model,
 } from "mongoose";
-
+import "./Club";
 const EventSchema = new Schema(
   {
     title: {
@@ -25,6 +25,32 @@ const EventSchema = new Schema(
       type: Date,
       required: true,
     },
+
+    startTime: {
+  type: String,
+  required: true,
+    },
+endTime: {
+  type: String,
+  required: true,
+},
+
+registrationDeadline: {
+  type: Date,
+  required: true,
+},
+
+mode: {
+  type: String,
+  enum: ["online", "offline", "hybrid"],
+  default: "offline",
+},
+
+status: {
+  type: String,
+  enum: ["upcoming", "completed", "cancelled"],
+  default: "upcoming",
+},
 
     imageUrl: {
       type: String,

@@ -44,33 +44,48 @@ export async function POST(req: Request) {
     const body = await req.json();
 
     const {
-      title,
-      description,
-      location,
-      date,
-      startTime,
-      endTime,
-      imageUrl,
-      category,
+       title,
+  description,
+  location,
+
+  date,
+
+  startTime,
+  endTime,
+
+  registrationDeadline,
+
+  mode,
+
+  category,
+  imageUrl,
     } = body;
 
     const event =
       await CommunityEvent.create({
 
-        title,
-        description,
-        location,
-        date,
+       
+    title,
+    description,
+    location,
 
-        startTime,
-        endTime,
+    date,
 
-        imageUrl,
-        category,
+    startTime,
+    endTime,
 
-        createdBy: user._id,
+    registrationDeadline,
 
-        status: "pending",
+    mode,
+
+    category,
+    imageUrl,
+
+    createdBy: user._id,
+
+    status: "pending",
+
+    eventStatus: "ongoing",
       });
 
     return Response.json({

@@ -36,6 +36,22 @@ endTime: {
   required: true,
 },
 
+registrationDeadline: {
+  type: Date,
+  required: true,
+},
+
+mode: {
+  type: String,
+  enum: ["online", "offline", "hybrid"],
+  default: "offline",
+},
+
+eventStatus: {
+  type: String,
+  enum: ["upcoming", "completed", "cancelled"],
+  default: "upcoming",
+},
     imageUrl: {
       type: String,
     },

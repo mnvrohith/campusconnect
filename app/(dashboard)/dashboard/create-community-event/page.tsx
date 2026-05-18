@@ -30,6 +30,10 @@ export default function CreateCommunityEventPage() {
 
     startTime: "",
     endTime: "",
+     registrationDeadline: "",
+
+  mode: "offline",
+
 
     category: "",
 
@@ -38,7 +42,7 @@ export default function CreateCommunityEventPage() {
 
   function handleChange(
     e: React.ChangeEvent<
-      HTMLInputElement | HTMLTextAreaElement
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
     >
   ) {
 
@@ -279,62 +283,112 @@ export default function CreateCommunityEventPage() {
 
           </div>
 
-          {/* Date */}
-          <div>
+         {/* EVENT DETAILS */}
+<div className="grid md:grid-cols-2 gap-6">
 
-            <label className="block mb-3 text-sm text-slate-300">
-              Event Date
-            </label>
+  {/* Event Date */}
+  <div>
 
-            <input
-              type="date"
-              name="date"
-              required
-              value={formData.date}
-              onChange={handleChange}
-              className="w-full rounded-2xl bg-slate-950 border border-slate-700 px-5 py-4 outline-none focus:border-indigo-500"
-            />
+    <label className="block mb-3 text-sm text-slate-300">
+      Event Date
+    </label>
 
-          </div>
+    <input
+      type="date"
+      name="date"
+      required
+      value={formData.date}
+      onChange={handleChange}
+      className="w-full rounded-2xl bg-slate-950 border border-slate-700 px-5 py-4 outline-none focus:border-indigo-500"
+    />
 
-          {/* Time */}
-          <div className="grid md:grid-cols-2 gap-6">
+  </div>
 
-            <div>
+  {/* Event Mode */}
+  <div>
 
-              <label className="block mb-3 text-sm text-slate-300">
-                Start Time
-              </label>
+    <label className="block mb-3 text-sm text-slate-300">
+      Event Mode
+    </label>
 
-              <input
-                type="time"
-                name="startTime"
-                required
-                value={formData.startTime}
-                onChange={handleChange}
-                className="w-full rounded-2xl bg-slate-950 border border-slate-700 px-5 py-4 outline-none focus:border-indigo-500"
-              />
+    <select
+      name="mode"
+      value={formData.mode}
+      onChange={handleChange}
+      className="w-full rounded-2xl bg-slate-950 border border-slate-700 px-5 py-4 outline-none focus:border-indigo-500"
+    >
 
-            </div>
+      <option value="offline">
+        Offline
+      </option>
 
-            <div>
+      <option value="online">
+        Online
+      </option>
 
-              <label className="block mb-3 text-sm text-slate-300">
-                End Time
-              </label>
+      <option value="hybrid">
+        Hybrid
+      </option>
 
-              <input
-                type="time"
-                name="endTime"
-                required
-                value={formData.endTime}
-                onChange={handleChange}
-                className="w-full rounded-2xl bg-slate-950 border border-slate-700 px-5 py-4 outline-none focus:border-indigo-500"
-              />
+    </select>
 
-            </div>
+  </div>
 
-          </div>
+  {/* Start Time */}
+  <div>
+
+    <label className="block mb-3 text-sm text-slate-300">
+      Start Time
+    </label>
+
+    <input
+      type="time"
+      name="startTime"
+      required
+      value={formData.startTime}
+      onChange={handleChange}
+      className="w-full rounded-2xl bg-slate-950 border border-slate-700 px-5 py-4 outline-none focus:border-indigo-500"
+    />
+
+  </div>
+
+  {/* End Time */}
+  <div>
+
+    <label className="block mb-3 text-sm text-slate-300">
+      End Time
+    </label>
+
+    <input
+      type="time"
+      name="endTime"
+      required
+      value={formData.endTime}
+      onChange={handleChange}
+      className="w-full rounded-2xl bg-slate-950 border border-slate-700 px-5 py-4 outline-none focus:border-indigo-500"
+    />
+
+  </div>
+
+  {/* Registration Deadline */}
+  <div className="md:col-span-2">
+
+    <label className="block mb-3 text-sm text-slate-300">
+      Registration Deadline
+    </label>
+
+    <input
+      type="datetime-local"
+      name="registrationDeadline"
+      required
+      value={formData.registrationDeadline}
+      onChange={handleChange}
+      className="w-full rounded-2xl bg-slate-950 border border-slate-700 px-5 py-4 outline-none focus:border-indigo-500"
+    />
+
+  </div>
+
+</div>
 
           {/* Category */}
           <div>

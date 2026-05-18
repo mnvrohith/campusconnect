@@ -33,6 +33,10 @@ export default function CreateEventPage() {
     description: "",
     location: "",
     date: "",
+     startTime: "",
+  endTime: "",
+  registrationDeadline: "",
+  mode: "offline",
     category: "",
     imageUrl: "",
     club: "",
@@ -344,58 +348,131 @@ export default function CreateEventPage() {
           </div>
 
           {/* Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+         {/* EVENT DETAILS */}
+<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
 
-            {/* Location */}
-            <div>
+  {/* Location */}
+  <div>
 
-              <label className="block mb-3 text-sm text-slate-300">
+    <label className="block mb-3 text-sm text-slate-300">
+      Location
+    </label>
 
-                Location
+    <input
+      type="text"
+      name="location"
+      required
+      value={formData.location}
+      onChange={handleChange}
+      placeholder="NIT DGP"
+      className="w-full rounded-2xl bg-slate-950 border border-slate-700 px-5 py-4 outline-none focus:border-indigo-500"
+    />
 
-              </label>
+  </div>
 
-              <input
-                type="text"
-                name="location"
-                required
-                value={
-                  formData.location
-                }
-                onChange={
-                  handleChange
-                }
-                placeholder="NIT DGP"
-                className="w-full rounded-2xl bg-slate-950 border border-slate-700 px-5 py-4 outline-none focus:border-indigo-500"
-              />
+  {/* Event Date */}
+  <div>
 
-            </div>
+    <label className="block mb-3 text-sm text-slate-300">
+      Event Date
+    </label>
 
-            {/* Date */}
-            <div>
+    <input
+      type="date"
+      name="date"
+      required
+      value={formData.date}
+      onChange={handleChange}
+      className="w-full rounded-2xl bg-slate-950 border border-slate-700 px-5 py-4 outline-none focus:border-indigo-500"
+    />
 
-              <label className="block mb-3 text-sm text-slate-300">
+  </div>
 
-                Event Date
+  {/* Start Time */}
+  <div>
 
-              </label>
+    <label className="block mb-3 text-sm text-slate-300">
+      Start Time
+    </label>
 
-              <input
-                type="date"
-                name="date"
-                required
-                value={
-                  formData.date
-                }
-                onChange={
-                  handleChange
-                }
-                className="w-full rounded-2xl bg-slate-950 border border-slate-700 px-5 py-4 outline-none focus:border-indigo-500"
-              />
+    <input
+      type="time"
+      name="startTime"
+      required
+      value={formData.startTime}
+      onChange={handleChange}
+      className="w-full rounded-2xl bg-slate-950 border border-slate-700 px-5 py-4 outline-none focus:border-indigo-500"
+    />
 
-            </div>
+  </div>
 
-          </div>
+  {/* End Time */}
+  <div>
+
+    <label className="block mb-3 text-sm text-slate-300">
+      End Time
+    </label>
+
+    <input
+      type="time"
+      name="endTime"
+      required
+      value={formData.endTime}
+      onChange={handleChange}
+      className="w-full rounded-2xl bg-slate-950 border border-slate-700 px-5 py-4 outline-none focus:border-indigo-500"
+    />
+
+  </div>
+
+  {/* Registration Deadline */}
+  <div>
+
+    <label className="block mb-3 text-sm text-slate-300">
+      Registration Deadline
+    </label>
+
+    <input
+      type="datetime-local"
+      name="registrationDeadline"
+      required
+      value={formData.registrationDeadline}
+      onChange={handleChange}
+      className="w-full rounded-2xl bg-slate-950 border border-slate-700 px-5 py-4 outline-none focus:border-indigo-500"
+    />
+
+  </div>
+
+  {/* Event Mode */}
+  <div>
+
+    <label className="block mb-3 text-sm text-slate-300">
+      Event Mode
+    </label>
+
+    <select
+      name="mode"
+      value={formData.mode}
+      onChange={handleChange}
+      className="w-full rounded-2xl bg-slate-950 border border-slate-700 px-5 py-4 outline-none focus:border-indigo-500"
+    >
+
+      <option value="offline">
+        Offline
+      </option>
+
+      <option value="online">
+        Online
+      </option>
+
+      <option value="hybrid">
+        Hybrid
+      </option>
+
+    </select>
+
+  </div>
+
+</div>
 
           {/* Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

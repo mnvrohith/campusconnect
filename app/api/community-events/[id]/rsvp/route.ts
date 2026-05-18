@@ -4,7 +4,7 @@ import { auth } from "@clerk/nextjs/server";
 
 import { connectDB } from "@/lib/mongodb";
 
-import Event from "@/models/Event";
+import CommunityEvent from "@/models/CommunityEvent";
 
 import User from "@/models/User";
 
@@ -33,14 +33,16 @@ export async function POST(
 
     }
 
-    const { id } = await context.params;
+    const { id } =
+      await context.params;
 
     await connectDB();
 
     /* FIND USER */
-    const dbUser = await User.findOne({
-      clerkId: userId,
-    });
+    const dbUser =
+      await User.findOne({
+        clerkId: userId,
+      });
 
     if (!dbUser) {
 
@@ -57,7 +59,8 @@ export async function POST(
     }
 
     /* FIND EVENT */
-    const event = await Event.findById(id);
+    const event =
+      await CommunityEvent.findById(id);
 
     if (!event) {
 
@@ -73,13 +76,32 @@ export async function POST(
 
     }
 
-    /* EVENT COMPLETED */
-    if (event.status === "completed") {
+    /* APPROVAL CHECK */
+    if (event.status !== "approved") {
 
       return NextResponse.json(
         {
           success: false,
-          message: "This event has already been completed.",
+          message: "Event is not approved yet",
+        },
+        {
+          status: 400,
+        }
+      );
+
+    }
+
+    /* EVENT COMPLETED */
+    if (
+      event.eventStatus ===
+      "completed"
+    ) {
+
+      return NextResponse.json(
+        {
+          success: false,
+          message:
+            "This event has already been completed.",
         },
         {
           status: 400,
@@ -89,12 +111,16 @@ export async function POST(
     }
 
     /* EVENT CANCELLED */
-    if (event.status === "cancelled") {
+    if (
+      event.eventStatus ===
+      "cancelled"
+    ) {
 
       return NextResponse.json(
         {
           success: false,
-          message: "This event was cancelled.",
+          message:
+            "This event was cancelled.",
         },
         {
           status: 400,
@@ -107,13 +133,16 @@ export async function POST(
     if (
       event.registrationDeadline &&
       new Date() >
-      new Date(event.registrationDeadline)
+      new Date(
+        event.registrationDeadline
+      )
     ) {
 
       return NextResponse.json(
         {
           success: false,
-          message: "Registration deadline has ended.",
+          message:
+            "Registration deadline has ended.",
         },
         {
           status: 400,
@@ -122,7 +151,7 @@ export async function POST(
 
     }
 
-    /* PREVENT CREATOR RSVP */
+    /* PREVENT OWNER RSVP */
     if (
       event.createdBy.toString() ===
       dbUser._id.toString()
@@ -131,7 +160,8 @@ export async function POST(
       return NextResponse.json(
         {
           success: false,
-          message: "You created this event",
+          message:
+            "You created this event",
         },
         {
           status: 400,
@@ -142,14 +172,17 @@ export async function POST(
 
     /* PREVENT DUPLICATE RSVP */
     const alreadyRegistered =
-      event.attendees.includes(dbUser._id);
+      event.attendees.includes(
+        dbUser._id
+      );
 
     if (alreadyRegistered) {
 
       return NextResponse.json(
         {
           success: false,
-          message: "Already registered",
+          message:
+            "Already registered",
         },
         {
           status: 400,
@@ -159,7 +192,9 @@ export async function POST(
     }
 
     /* ADD ATTENDEE */
-    event.attendees.push(dbUser._id);
+    event.attendees.push(
+      dbUser._id
+    );
 
     await event.save();
 
