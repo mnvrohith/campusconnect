@@ -6,6 +6,8 @@ import { connectDB } from "@/lib/mongodb";
 
 import User from "@/models/User";
 import CommunityEvent from "@/models/CommunityEvent";
+import ApproveCommunityEventButton from "./ApproveCommunityEventButton";
+import RejectCommunityEventButton from "./RejectCommunityEventButton";
 
 export default async function AdminCommunityEventsPage() {
 
@@ -193,35 +195,17 @@ export default async function AdminCommunityEventsPage() {
                 </div>
 
                 {/* ACTIONS */}
-<div className="mt-8 flex flex-wrap gap-4">
+                 <div className="flex gap-4">
 
-  {/* APPROVE */}
-  <form
-    action={`/api/admin/community-events/${event._id}/approve`}
-    method="POST"
-  >
+                           {/* APPROVE */}
+                          <ApproveCommunityEventButton
+                              eventId={event._id.toString()}
+                                />
 
-    <button
-      className="px-6 py-3 rounded-2xl bg-green-500 hover:bg-green-600 transition font-semibold"
-    >
-      Approve Event
-    </button>
-
-  </form>
-
-  {/* REJECT */}
-  <form
-    action={`/api/admin/community-events/${event._id}/reject`}
-    method="POST"
-  >
-
-    <button
-      className="px-6 py-3 rounded-2xl bg-red-500 hover:bg-red-600 transition font-semibold"
-    >
-      Reject Event
-    </button>
-
-  </form>
+                              {/* REJECT */}
+                               <RejectCommunityEventButton
+                              eventId={event._id.toString()}
+                                              />
 
 </div>
 
@@ -246,3 +230,4 @@ export default async function AdminCommunityEventsPage() {
   );
 
 }
+    

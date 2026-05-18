@@ -1,13 +1,18 @@
+import { NextResponse } from "next/server";
+
 import { auth } from "@clerk/nextjs/server";
 
 import { connectDB } from "@/lib/mongodb";
 
-import User from "@/models/User";
 import CommunityEvent from "@/models/CommunityEvent";
 
-export async function POST(
+import User from "@/models/User";
+
+export async function PATCH(
   req: Request,
-  { params }: { params: { id: string } }
+  context: {
+    params: Promise<{ id: string }>;
+  }
 ) {
 
   try {
@@ -16,55 +21,79 @@ export async function POST(
 
     if (!userId) {
 
-      return Response.json(
+      return NextResponse.json(
         {
           success: false,
           message: "Unauthorized",
         },
-        { status: 401 }
+        {
+          status: 401,
+        }
       );
 
     }
 
     await connectDB();
 
-    const user = await User.findOne({
+    const dbUser = await User.findOne({
       clerkId: userId,
     });
 
-    if (!user || user.role !== "admin") {
+    if (!dbUser || dbUser.role !== "admin") {
 
-      return Response.json(
+      return NextResponse.json(
         {
           success: false,
-          message: "Admin only",
+          message: "Admin access required",
         },
-        { status: 403 }
+        {
+          status: 403,
+        }
       );
 
     }
 
-    await CommunityEvent.findByIdAndDelete(
-      params.id
-    );
+    const { id } = await context.params;
 
-    return Response.redirect(
-      new URL(
-        "/admin/community-events",
-        req.url
-      )
-    );
+    const event =
+      await CommunityEvent.findById(id);
+
+    if (!event) {
+
+      return NextResponse.json(
+        {
+          success: false,
+          message: "Community event not found",
+        },
+        {
+          status: 404,
+        }
+      );
+
+    }
+
+    event.status = "rejected";
+
+    await event.save();
+
+    return NextResponse.json({
+      success: true,
+      message:
+        "Community event rejected",
+    });
 
   } catch (error) {
 
     console.log(error);
 
-    return Response.json(
+    return NextResponse.json(
       {
         success: false,
-        message: "Server Error",
+        message: "Server error",
       },
-      { status: 500 }
+      {
+        status: 500,
+      }
     );
 
   }

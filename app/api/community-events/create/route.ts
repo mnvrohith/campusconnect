@@ -85,7 +85,7 @@ export async function POST(req: Request) {
 
     status: "pending",
 
-    eventStatus: "ongoing",
+    eventStatus: "upcoming",
       });
 
     return Response.json({
