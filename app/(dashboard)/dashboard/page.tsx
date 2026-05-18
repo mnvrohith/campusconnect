@@ -385,8 +385,9 @@ export default async function DashboardPage() {
   {
     createdEvents.map((event: any) => (
 
-      <div
+      < Link
         key={event._id}
+        href={`/events/${event._id}`}
         className="
         group
         overflow-hidden
@@ -397,8 +398,8 @@ export default async function DashboardPage() {
         transition-all duration-300
         hover:-translate-y-2
         relative
-      "
-      >
+       "
+        >
 
         {/* GLOW */}
         <div className="absolute inset-0 bg-indigo-500/0 group-hover:bg-indigo-500/5 transition duration-500" />
@@ -547,30 +548,11 @@ export default async function DashboardPage() {
 
           </div>
 
-          {/* ACTION BUTTONS */}
-          <div className="mt-8 flex gap-3">
-
-            {
-              event.status === "upcoming" && (
-
-                <>
-                  <button className="flex-1 rounded-xl bg-emerald-500 py-3 font-medium hover:bg-emerald-600 transition">
-                    Mark Completed
-                  </button>
-
-                  <button className="flex-1 rounded-xl bg-red-500/90 py-3 font-medium hover:bg-red-600 transition">
-                    Cancel
-                  </button>
-                </>
-
-              )
-            }
-
-          </div>
+          
 
         </div>
 
-      </div>
+      </Link>
 
     ))
   }
@@ -627,81 +609,177 @@ export default async function DashboardPage() {
         {
           createdCommunityEvents.map((event: any) => (
 
-            <div
-              key={event._id}
-              className="group rounded-[32px] overflow-hidden border border-slate-800 bg-slate-900 hover:border-cyan-500/40 transition duration-300"
+            //comunityevent content
+            <Link
+        key={event._id}
+      
+                      href={`/community-events/${event._id}`}
+        className="
+        group
+        overflow-hidden
+        rounded-[32px]
+        border border-slate-800
+        bg-slate-900/70
+        hover:border-indigo-500/40
+        transition-all duration-300
+        hover:-translate-y-2
+        relative
+       "
+        >
+
+        {/* GLOW */}
+        <div className="absolute inset-0 bg-indigo-500/0 group-hover:bg-indigo-500/5 transition duration-500" />
+
+        {/* IMAGE */}
+        <div className="relative aspect-[4/5] bg-slate-950 overflow-hidden">
+
+          {
+            event.imageUrl ? (
+
+              <img
+                src={event.imageUrl}
+                alt={event.title}
+                className="w-full h-full object-contain p-3 group-hover:scale-105 transition duration-500"
+              />
+
+            ) : (
+
+              <div className="w-full h-full flex items-center justify-center text-slate-500">
+                No Poster
+              </div>
+
+            )
+          }
+
+          <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent" />
+
+          {/* STATUS */}
+          <div className="absolute top-5 left-5">
+
+            <span
+              className={`px-4 py-2 rounded-full text-xs border backdrop-blur-md
+              ${
+                event.eventStatus === "upcoming"
+                  ? "bg-emerald-500/20 text-emerald-300 border-emerald-500/30"
+                  : event.eventStatus === "completed"
+                  ? "bg-blue-500/20 text-blue-300 border-blue-500/30"
+                  : "bg-red-500/20 text-red-300 border-red-500/30"
+              }`}
             >
+              {event.eventStatus}
+            </span>
 
-              {/* IMAGE */}
-              <div className="relative aspect-[4/5] bg-slate-950 overflow-hidden">
+          </div>
 
-                <img
-                  src={event.imageUrl}
-                  alt={event.title}
-                  className="w-full h-full object-contain p-3 group-hover:scale-105 transition duration-500"
-                />
+          {/* CATEGORY */}
+          <div className="absolute bottom-5 left-5">
 
-                <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent" />
+            <span className="px-4 py-2 rounded-full bg-indigo-500/20 border border-indigo-500/30 text-indigo-300 text-sm font-medium">
+              {event.category}
+            </span>
 
-                <div className="absolute top-5 left-5">
+          </div>
 
-                  <span className="px-4 py-2 rounded-full bg-cyan-500/20 border border-cyan-500/30 text-cyan-300 text-sm">
-                    Community Event
-                  </span>
+        </div>
 
-                </div>
+        {/* CONTENT */}
+        <div className="p-7">
 
-              </div>
+          <h3 className="text-2xl font-bold line-clamp-2">
+            {event.title}
+          </h3>
 
-              {/* CONTENT */}
-              <div className="p-7">
+          <p className="mt-4 text-slate-400 line-clamp-3 leading-7">
+            {event.description}
+          </p>
 
-                <h3 className="text-2xl font-bold">
-                  {event.title}
-                </h3>
+          {/* META */}
+          <div className="mt-6 space-y-3 text-sm">
 
-                <p className="mt-4 text-slate-400 line-clamp-3">
-                  {event.description}
-                </p>
+            <div className="flex items-center justify-between text-slate-400">
 
-                <div className="mt-6 flex items-center justify-between text-sm text-slate-500">
+              <span>📍 Location</span>
 
-                  <span>
-                    📍 {event.location}
-                  </span>
-
-                  <span>
-                    📅 {
-                      new Date(event.date)
-                        .toLocaleDateString()
-                    }
-                  </span>
-
-                </div>
-
-                <div className="mt-4 text-sm text-cyan-400">
-
-                  {event.startTime} - {event.endTime}
-
-                </div>
-
-                <div className="mt-6">
-
-                  <span
-                    className={`px-4 py-2 rounded-full text-sm ${
-                      event.status === "approved"
-                        ? "bg-green-500/20 text-green-300"
-                        : "bg-yellow-500/20 text-yellow-300"
-                    }`}
-                  >
-                    {event.status}
-                  </span>
-
-                </div>
-
-              </div>
+              <span className="text-white">
+                {event.location}
+              </span>
 
             </div>
+
+            <div className="flex items-center justify-between text-slate-400">
+
+              <span>📅 Date</span>
+
+              <span className="text-white">
+                {new Date(event.date).toLocaleDateString()}
+              </span>
+
+            </div>
+
+            <div className="flex items-center justify-between text-slate-400">
+
+              <span>👥 Registrations</span>
+
+              <span className="text-indigo-400 font-semibold">
+                {event.attendees.length}
+              </span>
+
+            </div>
+
+          </div>
+
+          {/* ATTENDEES */}
+          <div className="mt-8">
+
+            <h4 className="text-lg font-semibold">
+              Registered Students
+            </h4>
+
+            {
+              event.attendees.length === 0 ? (
+
+                <div className="mt-4 rounded-2xl border border-dashed border-slate-700 p-6 text-center text-slate-500 text-sm">
+                  No registrations yet.
+                </div>
+
+              ) : (
+
+                <div className="mt-4 space-y-3 max-h-48 overflow-y-auto pr-2">
+
+                  {
+                    event.attendees.map((user: any) => (
+
+                      <div
+                        key={user._id}
+                        className="rounded-2xl border border-slate-800 bg-slate-950/70 p-4"
+                      >
+
+                        <p className="font-medium">
+                          {user.name}
+                        </p>
+
+                        <p className="text-sm text-slate-400 mt-1">
+                          {user.email}
+                        </p>
+
+                      </div>
+
+                    ))
+                  }
+
+                </div>
+
+              )
+            }
+
+          </div>
+
+        
+         
+
+        </div>
+
+      </Link>
 
           ))
         }
@@ -766,8 +844,9 @@ export default async function DashboardPage() {
         {
           createdClubs.map((club: any) => (
 
-            <div
+            <Link
               key={club._id}
+              href={`/clubs/${club._id}`}
               className="group rounded-3xl overflow-hidden border border-slate-800 bg-slate-900 hover:border-indigo-500/40 transition duration-300 hover:-translate-y-1"
             >
 
@@ -854,7 +933,7 @@ export default async function DashboardPage() {
 
               </div>
 
-            </div>
+            </Link>
 
           ))
         }

@@ -7,7 +7,7 @@ import { connectDB } from "@/lib/mongodb";
 import User from "@/models/User";
 import CommunityEvent from "@/models/CommunityEvent";
 
-export async function POST(
+export async function PATCH(
   req: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
@@ -68,30 +68,30 @@ export async function POST(
 
     }
 
-    const alreadyRegistered =
-      event.attendees.includes(user._id);
-
-    if (alreadyRegistered) {
+    if (
+      event.createdBy.toString() !==
+      user._id.toString()
+    ) {
 
       return NextResponse.json(
         {
           success: false,
-          message: "Already registered",
+          message: "Forbidden",
         },
         {
-          status: 400,
+          status: 403,
         }
       );
 
     }
 
-    event.attendees.push(user._id);
+    event.eventStatus = "completed";
 
     await event.save();
 
     return NextResponse.json({
       success: true,
-      message: "RSVP successful",
+      message: "Event marked as completed",
     });
 
   } catch (error) {

@@ -354,8 +354,9 @@ export default async function EventsPage() {
                 {
                   communityEvents.map((event: any) => (
 
-                    <div
+                    <Link
                       key={event._id}
+                      href={`/community-events/${event._id}`}
                       className="group overflow-hidden rounded-[32px] border border-slate-800 bg-slate-900 hover:border-cyan-500/40 transition duration-300"
                     >
 
@@ -457,7 +458,7 @@ export default async function EventsPage() {
 
                       </div>
 
-                    </div>
+                    </Link>
 
                   ))
                 }

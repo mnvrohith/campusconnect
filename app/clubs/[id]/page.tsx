@@ -95,6 +95,18 @@ export default async function ClubPage(
               <span className="px-4 py-2 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-indigo-300 text-sm">
                 {club.category}
               </span>
+                
+               <span
+                    className={`text-xs px-4 py-2 rounded-full border ${
+                      club.status === "approved"
+                        ? "bg-green-500/10 text-green-400 border-green-500/20"
+                        : club.status === "pending"
+                        ? "bg-yellow-500/10 text-yellow-400 border-yellow-500/20"
+                        : "bg-red-500/10 text-red-400 border-red-500/20"
+                    }`}
+                  >
+                    {club.status}
+                  </span>
 
               <h1 className="mt-6 text-6xl font-black tracking-tight">
                 {club.name}
