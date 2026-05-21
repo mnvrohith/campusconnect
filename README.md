@@ -63,9 +63,6 @@ CampusConnect solves this by providing one centralized platform where students c
 ### Authentication
 - Clerk
 
-### File Uploads
-- UploadThing
-
 ### Deployment
 - Vercel
 
