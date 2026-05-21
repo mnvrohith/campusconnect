@@ -1,4 +1,3 @@
-````md
 # CampusConnect
 
 > A modern full-stack campus community platform for managing clubs, events, and student engagement.
@@ -135,4 +134,4 @@ Deployed using **Vercel** with **MongoDB Atlas** database integration.
 # 👨‍💻 Author
 
 Built with passion for improving campus engagement and student collaboration.
-````
+
