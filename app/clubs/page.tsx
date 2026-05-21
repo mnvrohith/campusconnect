@@ -1,11 +1,13 @@
+
+
 async function getClubs() {
 
   const res = await fetch(
-    "http://localhost:3000/api/clubs",
+    `${process.env.NEXT_PUBLIC_BASE_URL}/api/clubs`,
     {
       cache: "no-store",
     }
-  );
+  ); 
 
   return res.json();
 

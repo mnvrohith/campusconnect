@@ -10,7 +10,7 @@ import {connectDB} from "@/lib/mongodb";
 async function getEvent(id: string) {
 
   const res = await fetch(
-    `http://localhost:3000/api/events/${id}`,
+    `${process.env.NEXT_PUBLIC_BASE_URL}/api/events/${id}`,
     {
       cache: "no-store",
     }

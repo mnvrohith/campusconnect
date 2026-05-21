@@ -33,7 +33,7 @@ export default function EditEventPage() {
       try {
 
         const res = await fetch(
-          `/api/events/${id}`
+          `${process.env.NEXT_PUBLIC_BASE_URL}/api/events/${id}`
         );
 
         const data = await res.json();

@@ -3,7 +3,7 @@ import Link from "next/link";
 async function getEvents() {
 
   const res = await fetch(
-    "http://localhost:3000/api/events",
+    `${process.env.NEXT_PUBLIC_BASE_URL}/api/events`,
     {
       cache: "no-store",
     }
@@ -16,7 +16,7 @@ async function getEvents() {
 async function getCommunityEvents() {
 
   const res = await fetch(
-    "http://localhost:3000/api/community-events",
+    `${process.env.NEXT_PUBLIC_BASE_URL}/api/community-events`,
     {
       cache: "no-store",
     }
