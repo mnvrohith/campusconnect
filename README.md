@@ -1,85 +1,53 @@
 # CampusConnect
 
-> A modern full-stack campus community platform for managing clubs, events, and student engagement.
+CampusConnect is a full-stack campus community platform built to simplify event discovery, club management, and student engagement within a college campus.
 
 ---
 
-## About The Project
+## Problem Statement
 
-CampusConnect helps students discover campus events, join communities, and stay connected with club activities through one centralized platform.
+Campus event information is usually scattered across WhatsApp groups, posters, and social media pages. Students often miss important updates, registrations, and opportunities happening around campus.
 
-Instead of scattered WhatsApp messages, posters, and Instagram announcements, CampusConnect provides a single place for everything related to campus engagement.
+CampusConnect solves this by providing one centralized platform where students can explore events, join communities, and interact with campus organizations.
 
 ---
 
-# ✨ Features
+## Features
 
-## Events System
-
+### Events
 - Explore official club events
 - Explore community events
 - Detailed event pages
-- RSVP / Register for events
-- Event status system
+- RSVP/Register for events
+- Event status management
   - Upcoming
   - Completed
   - Cancelled
 
----
-
-## Club System
-
+### Clubs
 - Create clubs
 - Explore campus clubs
 - View club details
-- Club-based official event management
+- Organize official club events
 
----
+### Community Events
+- Create student-led events
+- Admin approval system
+- Public community participation
 
-## Community Events
+### Authentication & Access
+- Secure authentication using Clerk
+- Role-based access control
+- Protected admin routes
 
-Students can:
-
-- Create community events
-- Organize meetups, study groups, gaming sessions, etc.
-- Upload posters and event details
-
-Community events go through admin approval before becoming public.
-
----
-
-## 🛡️ Admin Moderation
-
-Admins can:
-
+### Admin Features
 - Approve community events
 - Reject inappropriate events
-- Moderate the platform
+- Moderate platform activity
 
 ---
 
-## 👤 Authentication
-
-- Secure authentication using Clerk
-- Role-based access system
-- Protected routes
-
----
-
-# 🧠 Problem Statement
-
-Campus event information is often scattered across multiple platforms, making it difficult for students to stay updated and participate actively.
-
-CampusConnect solves this by creating a centralized ecosystem for:
-
-- Event discovery
-- Club management
-- Student participation
-- Community engagement
-
----
-
-# 🛠️ Tech Stack
+## Tech Stack
 
 ### Frontend
 - Next.js
@@ -101,37 +69,4 @@ CampusConnect solves this by creating a centralized ecosystem for:
 ### Deployment
 - Vercel
 
----
-
-# 📸 Core Functionalities
-
-✅ Create Clubs  
-✅ Create Official Club Events  
-✅ Create Community Events  
-✅ RSVP System  
-✅ Admin Approval Workflow  
-✅ Event Status Management  
-✅ Responsive Modern UI  
-
----
-
-# ⚡ Future Improvements
-
-- Event search & filters
-- Notifications system
-- Attendance tracking
-- Event analytics
-- Club recruitment system
-
----
-
-# 🌐 Deployment
-
-Deployed using **Vercel** with **MongoDB Atlas** database integration.
-
----
-
-# 👨‍💻 Author
-
-Built with passion for improving campus engagement and student collaboration.
 
