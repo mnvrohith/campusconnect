@@ -88,7 +88,7 @@ export default function Navbar() {
           ) : (
             <>
               {/* User Avatar */}
-              <UserButton afterSignOutUrl="/" />
+              <UserButton />
             </>
           )}
 
