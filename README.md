@@ -1,5 +1,3 @@
-Here’s a clean and professional `README.md` version for your GitHub repo:
-
 ````md
 # CampusConnect
 
